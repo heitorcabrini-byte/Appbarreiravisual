@@ -34,3 +34,10 @@ export default defineConfig({
   // File types to support raw imports. Never add .css, .tsx, or .ts files to this.
   assetsInclude: ['**/*.svg', '**/*.csv'],
 })
+import { defineConfig } from 'vite'
+import react from '@vitejs/react-swc' // ou o plugin que estiver usando
+
+export default defineConfig({
+  plugins: [react()],
+  base: '/Appbarreiravisual/', // O nome exato do seu repositório entre barras
+})
