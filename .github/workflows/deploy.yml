@@ -18,7 +18,7 @@ jobs:
   deploy:
     environment:
       name: github-pages
-      url: ${{ steps: deployment.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url }}
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
@@ -30,8 +30,6 @@ jobs:
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          # Se os seus arquivos do Figma (index.html, etc) estiverem soltos na raiz, deixe o ponto '.'
-          # Se eles estiverem dentro de uma pasta específica (ex: 'dist' ou 'public'), mude o ponto para o nome da pasta.
           path: '.'
           
       - name: Deploy to GitHub Pages
