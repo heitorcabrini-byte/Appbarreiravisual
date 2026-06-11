@@ -1,30 +1,66 @@
-/* Configuração do Modo Alto Contraste (Preto e Amarelo) */
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: 240 10% 3.9%;
+    --foreground: 0 0% 98%;
+    --card: 240 10% 3.9%;
+    --card-foreground: 0 0% 98%;
+    --popover: 240 10% 3.9%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 240 5.9% 90%;
+    --primary-foreground: 240 5.9% 10%;
+    --secondary: 240 3.7% 15.9%;
+    --secondary-foreground: 0 0% 98%;
+    --muted: 240 3.7% 15.9%;
+    --muted-foreground: 240 5% 64.9%;
+    --accent: 240 3.7% 15.9%;
+    --accent-foreground: 0 0% 98%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 240 3.7% 15.9%;
+    --input: 240 3.7% 15.9%;
+    --ring: 240 4.9% 83.9%;
+  }
+}
+
+/* Regras de Alto Contraste Ativadas dinamicamente via Classes Raiz */
 .high-contrast {
-  --background: #000000 !important;
-  --foreground: #facc15 !important;
-  --card: #000000 !important;
-  --border: #facc15 !important;
-  --muted-foreground: #facc15 !important;
-  --primary: #facc15 !important;
-  --primary-foreground: #000000 !important;
-  --secondary: #000000 !important;
+  background-color: #000000 !important;
+  color: #facc15 !important; /* Amarelo */
 }
 
-/* Configuração do Modo Invertido (Fundo Preto com Letras Brancas Lípidas) */
+.high-contrast * {
+  background-color: transparent !important;
+  color: #facc15 !important;
+  border-color: #facc15 !important;
+}
+
+.high-contrast button, 
+.high-contrast input, 
+.high-contrast a,
+.high-contrast kbd {
+  border: 2px solid #facc15 !important;
+  background-color: #000000 !important;
+}
+
 .inverted-contrast {
-  --background: #000000 !important;
-  --foreground: #ffffff !important;
-  --card: #000000 !important;
-  --border: #ffffff !important;
-  --muted-foreground: #e5e5e5 !important;
-  --primary: #ffffff !important;
-  --primary-foreground: #000000 !important;
-  --secondary: #171717 !important;
+  background-color: #ffffff !important;
+  color: #000000 !important;
 }
 
-/* Deixa as tags kbd bonitas dentro da caixinha de ajuda */
-kbd {
-  box-shadow: 0 2px 0 rgba(255, 255, 255, 0.2);
-  display: inline-block;
-  white-space: nowrap;
+.inverted-contrast * {
+  background-color: transparent !important;
+  color: #000000 !important;
+  border-color: #000000 !important;
+}
+
+.inverted-contrast button, 
+.inverted-contrast input, 
+.inverted-contrast a,
+.inverted-contrast kbd {
+  border: 2px solid #000000 !important;
+  background-color: #ffffff !important;
 }
