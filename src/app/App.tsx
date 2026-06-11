@@ -6,7 +6,7 @@ import { AnnouncementCard } from './components/AnnouncementCard';
 
 type ContrastMode = 'normal' | 'high-contrast' | 'inverted';
 
-// 📋 DADOS REAIS E COMPLETOS EXTRAÍDOS DO SEU FIGMA
+// 📋 DADOS REAIS EXTRAÍDOS DO SEU PRINT DO FIGMA
 const ANNOUNCEMENTS_DATA = [
   {
     id: '1',
@@ -54,7 +54,7 @@ export default function App() {
   const [session, setSession] = useState<any>(null);
   const [currentScreen, setCurrentScreen] = useState<'login' | 'register'>('login');
   
-  const [fontSize, setFontSize] = useState(16); // Base padrão do navegador (16px)
+  const [fontSize, setFontSize] = useState(16); // Base 16px padrão de navegadores
   const [contrastMode, setContrastMode] = useState<ContrastMode>('normal');
   const [showKeyboardHelp, setShowKeyboardHelp] = useState(false);
 
@@ -65,7 +65,7 @@ export default function App() {
   const minFont = 12;
   const maxFont = 24;
 
-  // ⌨️ Escuta Global de Atalhos
+  // ⌨️ Escuta de atalhos globais
   useEffect(() => {
     const handleGlobalKeyDown = (e: KeyboardEvent) => {
       if (e.altKey && e.key === '1') {
@@ -89,7 +89,7 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleGlobalKeyDown);
   }, [contrastMode]);
 
-  // 🔥 SOLUÇÃO DO ZOOM: Atualiza a fonte direto na raiz HTML para o Tailwind recalcular tudo!
+  // ⚡ SOLUÇÃO DO ZOOM: Atualiza a fonte na raiz HTML para o Tailwind recalcular todas as classes
   useEffect(() => {
     const root = document.documentElement;
     root.style.fontSize = `${fontSize}px`;
@@ -111,7 +111,6 @@ export default function App() {
   };
 
   const filteredAnnouncements = ANNOUNCEMENTS_DATA.filter(item => {
-    // Evita o erro de undefined verificando se o campo existe de forma segura
     const categoryStr = item?.category || 'Geral';
     const titleStr = item?.title || '';
     const contentStr = item?.content || '';
@@ -124,9 +123,7 @@ export default function App() {
     return matchesFilter && matchesSearch;
   });
 
-  const sortedAnnouncements = [...filteredAnnouncements].sort((a, b) => {
-    return b.id.localeCompare(a.id); // Ordenação simples por ID/recente
-  });
+  const sortedAnnouncements = [...filteredAnnouncements].sort((a, b) => b.id.localeCompare(a.id));
 
   return (
     <div className="min-h-screen bg-[#060b13] text-white antialiased transition-colors duration-200">
@@ -171,8 +168,8 @@ export default function App() {
 
             {showKeyboardHelp && (
               <div className="mb-6 p-4 rounded-xl border bg-blue-950/20 border-blue-800/30 text-xs text-slate-300">
-                <p className="font-bold text-blue-400 mb-2">⌨️ Atalhos rápidos:</p>
-                <p>Alt+1: Aumentar Texto | Alt+2: Diminuir Texto | Alt+3: Contraste | Alt+4: Fechar guia</p>
+                <p className="font-bold text-blue-400 mb-1">⌨️ Atalhos rápidos:</p>
+                <p>Alt+1: Aumentar Texto | Alt+2: Diminuir Texto | Alt+3: Trocar Contraste | Alt+4: Fechar guia</p>
               </div>
             )}
 
