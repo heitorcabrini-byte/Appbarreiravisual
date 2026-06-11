@@ -1,3 +1,15 @@
+// 🔍 Tipos e Constantes exigidos pelo FilterSearchBar
+export type FilterOption = 'todos' | 'urgente' | 'importante' | 'geral' | 'informativo';
+export type SortOption = 'recente' | 'antigo';
+
+export const FILTER_OPTIONS: { value: FilterOption; label: string; icon?: string }[] = [
+  { value: 'todos', label: 'Todos' },
+  { value: 'urgente', label: 'Urgente' },
+  { value: 'importante', label: 'Importante' },
+  { value: 'geral', label: 'Geral' },
+  { value: 'informativo', label: 'Informativo' }
+];
+
 export interface Announcement {
   id: string;
   title: string;
@@ -12,7 +24,7 @@ export const announcementsData: Announcement[] = [
   {
     id: "1",
     title: "Período de Rematrícula Escolar 2026",
-    content: "Atenção responsáveis! O prazo para renovação de matrícula para o segundo semestre já está aberto. Os documentos necessários devem ser entregues diretamente na secretaria ou enviados pelo portal do aluno até o dia 30/06.",
+    content: "Atenção responsáveis! O prazo para renovação de matrícula para o second semestre já está aberto. Os documentos necessários devem ser entregues diretamente na secretaria ou enviados pelo portal do aluno até o dia 30/06.",
     category: "urgente",
     date: "11/06/2026",
     author: "Secretaria Escolar",
