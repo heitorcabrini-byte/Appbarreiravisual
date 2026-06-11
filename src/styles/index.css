@@ -75,3 +75,21 @@ main, .container {
   max-width: 440px; /* Largura padrão de uma tela de login moderna */
   margin: 0 auto;
 }
+
+/* Centraliza a estrutura da página inteira na tela */
+#root, body {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  min-height: 100vh !important;
+  width: 100% !important;
+  box-sizing: border-box;
+}
+
+/* Define o tamanho limite do bloco centralizado do Figma */
+main, .container {
+  width: 100%;
+  max-width: 440px; /* Largura perfeita para caixas de login modernas */
+  margin: 0 auto;
+}
