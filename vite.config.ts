@@ -2,7 +2,7 @@ import { defineConfig } from 'vite'
 import react from '@vitejs/plugin-react'
 import tailwindcss from '@tailwindcss/vite'
 
-// Configuração padrão limpa para o Vite + Tailwind v4
+// Configuração oficial para Vite + Tailwind v4 rodando no GitHub Pages
 export default defineConfig({
   plugins: [
     react(),
