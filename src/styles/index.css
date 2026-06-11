@@ -64,3 +64,40 @@
   border: 2px solid #000000 !important;
   background-color: #ffffff !important;
 }
+/* Customização global para os modos de acessibilidade no Tailwind v4 */
+
+/* 🟡 Regras para o Alto Contraste */
+.high-contrast {
+  --background: #000000 !important;
+  --foreground: #ffffff !important;
+  --primary: #facc15 !important; /* Amarelo */
+  --primary-foreground: #000000 !important;
+  --secondary: #000000 !important;
+  --muted-foreground: #ffffff !important;
+  --border: #facc15 !important;
+  background-color: #000000 !important;
+  color: #ffffff !important;
+}
+
+.high-contrast bg-secondary, 
+.high-contrast .bg-[#0d1527], 
+.high-contrast .bg-slate-900 {
+  background-color: #000000 !important;
+  border-color: #facc15 !important;
+}
+
+.high-contrast text-slate-300, 
+.high-contrast text-slate-400,
+.high-contrast p {
+  color: #ffffff !important;
+}
+
+/* ⚪ Regras para o Modo Invertido */
+.inverted-contrast {
+  filter: invert(1) hue-rotate(180deg);
+}
+/* Impede que imagens ou emojis fiquem com as cores zoadas no modo invertido */
+.inverted-contrast img, 
+.inverted-contrast [aria-hidden="true"] {
+  filter: invert(1) hue-rotate(180deg);
+}
