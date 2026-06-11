@@ -9,8 +9,7 @@ import {
   LOGIN_ERROR_MESSAGES,
   type Session,
   type LoginError,
-} from '../../data/user'; // <--- AGORA SIM! Apontando para o arquivo correto 'user'
-
+} from '../mocks/user'; // <--- Caminho real usando a sua pasta de mocks!
 type ContrastMode = 'normal' | 'high-contrast' | 'inverted';
 
 interface LoginScreenProps {
