@@ -65,24 +65,24 @@ export function Header({
             </div>
 
             {/* Alternador de Contraste */}
-            <button
-              onClick={onCycleContrast}
-              title="Alternar contraste (Alt + 3)"
-              aria-label={`Mudar modo de contraste. Atual: ${contrastMode}`}
-              className={cn(
-                "rounded-xl border p-2 transition-all flex items-center gap-1.5 text-xs font-medium",
-                contrastMode === 'high-contrast'
-                  ? "bg-yellow-400 border-yellow-400 text-black font-bold"
-                  : "bg-[#0b121f] border-slate-800 text-slate-400 hover:text-white hover:bg-slate-800"
-              )}
-            >
-              <Eye size={18} />
-              <span className="hidden sm:inline">
-                {contrastMode === 'normal' && 'Contraste'}
-                {contrastMode === 'high-contrast' && 'Alto Contraste'}
-                {contrastMode === 'inverted' && 'Invertido'}
-              </span>
-            </button>
+           <button
+  onClick={onCycleContrast}
+  title="Alternar contraste (Alt + 3)"
+  aria-label={`Mudar modo de contraste. Atual: ${contrastMode}`}
+  className={cn(
+    "rounded-xl border p-2 transition-all flex items-center gap-1.5 text-xs font-medium cursor-pointer",
+    contrastMode === 'high-contrast'
+      ? "bg-yellow-400 border-yellow-400 text-black font-bold"
+      : "bg-[#0b121f] border-slate-800 text-slate-400 hover:text-white hover:bg-slate-800"
+  )}
+>
+  <Eye size={18} />
+  <span className="hidden sm:inline">
+    {contrastMode === 'normal' && 'Normal'}
+    {contrastMode === 'high-contrast' && 'Alto Contraste'}
+    {contrastMode === 'inverted' && 'Invertido'}
+  </span>
+</button>
 
             {/* Ajuda de Teclado */}
             <button
