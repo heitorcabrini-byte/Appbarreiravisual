@@ -93,12 +93,15 @@ export default function App() {
     return matchesFilter && matchesSearch;
   });
 
-  // Ordenação
+  // 🔄 Ordenação Numérica Consertada (Evita bugs com IDs como "10")
   const sortedAnnouncements = [...filteredAnnouncements].sort((a, b) => {
+    const idA = parseInt(a.id, 10);
+    const idB = parseInt(b.id, 10);
+    
     if (sort === 'antigo') {
-      return a.id.localeCompare(b.id);
+      return idA - idB; // Menor ID primeiro (Mais antigo)
     }
-    return b.id.localeCompare(a.id);
+    return idB - idA; // Maior ID primeiro (Mais recente)
   });
 
   return (
@@ -138,7 +141,7 @@ export default function App() {
                 Mural de Avisos
               </h1>
               <p className="text-sm text-slate-400 mt-2">
-                Acompanhe comunicados, eventos e informações importantes da escola.
+                Acompanhe comunicados, events e informações importantes da escola.
               </p>
             </div>
 
@@ -165,7 +168,8 @@ export default function App() {
                 Nenhum aviso encontrado para os filtros selecionados.
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+              /* ⚡ O items-start impede que os cards estiquem de forma desalinhada ao expandir */
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 items-start">
                 {sortedAnnouncements.map((announcement) => (
                   <AnnouncementCard key={announcement.id} announcement={announcement} />
                 ))}
