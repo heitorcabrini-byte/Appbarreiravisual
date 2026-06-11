@@ -9,7 +9,7 @@ import {
   LOGIN_ERROR_MESSAGES,
   type Session,
   type LoginError,
-} from '../../../data/users'; // <--- CAMINHO CORRIGIDO AQUI!
+} from '../../data/user'; // <--- AGORA SIM! Apontando para o arquivo correto 'user'
 
 type ContrastMode = 'normal' | 'high-contrast' | 'inverted';
 
