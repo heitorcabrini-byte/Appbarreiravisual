@@ -16,10 +16,37 @@ interface AnnouncementCardProps {
 }
 
 export function AnnouncementCard({ announcement }: AnnouncementCardProps) {
-  // 🔄 Estado que controla se este card específico está expandido
   const [isExpanded, setIsExpanded] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false); // 🔄 Estado para saber se o áudio está tocando
 
-  // Mapeamento de cores baseado na categoria para os badges
+  // 🔊 FUNÇÃO SENSACIONAL DE LEITURA EM VOZ ALTA (Acessibilidade Digital)
+  const handleListen = () => {
+    // Se já estiver falando, o clique cancela a voz (funciona como Stop)
+    if ('speechSynthesis' in window) {
+      if (isSpeaking) {
+        window.speechSynthesis.cancel();
+        setIsSpeaking(false);
+        return;
+      }
+
+      // Junta o título e o conteúdo para o robô ler tudo em sequência
+      const textToRead = `Aviso ${announcement.category}. ${announcement.title}. ${announcement.content}`;
+      
+      const utterance = new SpeechSynthesisUtterance(textToRead);
+      utterance.lang = 'pt-BR'; // Força o idioma para português do Brasil
+      utterance.rate = 1.1;     // Velocidade da fala um pouquinho mais natural
+
+      // Eventos para mudar o texto do botão visualmente enquanto fala
+      utterance.onstart = () => setIsSpeaking(true);
+      utterance.onend = () => setIsSpeaking(false);
+      utterance.onerror = () => setIsSpeaking(false);
+
+      window.speechSynthesis.speak(utterance);
+    } else {
+      alert("Desculpe, seu navegador não suporta a função de leitura de texto em voz alta.");
+    }
+  };
+
   const getCategoryStyles = (category: string) => {
     switch (category.toLowerCase()) {
       case 'urgente':
@@ -59,14 +86,14 @@ export function AnnouncementCard({ announcement }: AnnouncementCardProps) {
           {announcement.title}
         </h2>
 
-        {/* 👁️ Conteúdo - RESOLVIDO: Cor 'text-slate-200' garante leitura perfeita sobre o fundo escuro */}
+        {/* Conteúdo */}
         <p className={`mt-3 text-sm text-slate-200 leading-relaxed font-normal ${
           isExpanded ? '' : 'line-clamp-3'
         }`}>
           {announcement.content}
         </p>
 
-        {/* Informações adicionais que aparecem APENAS ao expandir */}
+        {/* Informações adicionais ao expandir */}
         {isExpanded && (
           <div className="mt-5 pt-4 border-t border-slate-800/60 transition-all duration-200">
             {announcement.author && (
@@ -95,15 +122,24 @@ export function AnnouncementCard({ announcement }: AnnouncementCardProps) {
       {/* Rodapé de Ações */}
       <div className="mt-5 pt-3 border-t border-slate-800/40 flex items-center justify-between">
         <div className="flex gap-4 text-xs text-slate-400 font-medium">
-          <button className="hover:text-white transition-colors flex items-center gap-1">
-            🔊 Ouvir
+          
+          {/* 🚀 BOTÃO DE ÁUDIO TOTALMENTE FUNCIONAL */}
+          <button 
+            onClick={handleListen}
+            className={`transition-colors flex items-center gap-1 font-semibold p-1 rounded cursor-pointer ${
+              isSpeaking ? 'text-green-400 hover:text-green-300' : 'text-slate-400 hover:text-white'
+            }`}
+            title={isSpeaking ? "Parar de ouvir" : "Ouvir aviso em voz alta"}
+          >
+            {isSpeaking ? '🛑 Parar' : '🔊 Ouvir'}
           </button>
-          <button className="hover:text-white transition-colors flex items-center gap-1">
+
+          <button className="hover:text-white transition-colors flex items-center gap-1 cursor-pointer">
             ⭐ Salvar
           </button>
         </div>
 
-        {/* 🚀 BOTÃO INTERATIVO COM FUNÇÃO CLIQUE CONFIGURADA */}
+        {/* Botão de Expandir / Retrair */}
         <button
           onClick={() => setIsExpanded(!isExpanded)}
           className="text-sm font-bold text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-1 cursor-pointer"
