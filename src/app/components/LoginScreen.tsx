@@ -9,7 +9,7 @@ import {
   LOGIN_ERROR_MESSAGES,
   type Session,
   type LoginError,
-} from '../mocks/user'; // <--- Caminho real usando a sua pasta de mocks!
+} from '../mocks/user';
 type ContrastMode = 'normal' | 'high-contrast' | 'inverted';
 
 interface LoginScreenProps {
