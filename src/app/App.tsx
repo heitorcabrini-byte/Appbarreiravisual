@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { LoginScreen } from './components/LoginScreen';
+import LoginScreen from './components/LoginScreen';
 import { Header } from './components/Header';
 import { FilterSearchBar } from './components/FilterSearchBar';
 import { AnnouncementCard } from './components/AnnouncementCard';
