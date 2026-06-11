@@ -1,67 +1,30 @@
-@import "tailwindcss";
-
-/* ──────────────────────────────────────────────────────────────────────────
-   CONFIGURAÇÕES GLOBAIS DO APP
-   ────────────────────────────────────────────────────────────────────────── */
-
-html, body, #root {
-  min-height: 100vh;
-  width: 100%;
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  background-color: #0b0f19 !important; /* Mantém o fundo escuro oficial */
-  color: #ffffff;
+/* Configuração do Modo Alto Contraste (Preto e Amarelo) */
+.high-contrast {
+  --background: #000000 !important;
+  --foreground: #facc15 !important;
+  --card: #000000 !important;
+  --border: #facc15 !important;
+  --muted-foreground: #facc15 !important;
+  --primary: #facc15 !important;
+  --primary-foreground: #000000 !important;
+  --secondary: #000000 !important;
 }
 
-/* ──────────────────────────────────────────────────────────────────────────
-   ESTILOS EXCLUSIVOS DA TELA DE LOGIN 
-   (Só aplica se o elemento #auth-content existir na página)
-   ────────────────────────────────────────────────────────────────────────── */
-
-/* Centraliza a caixa de login horizontal e verticalmente na tela */
-body:has(#auth-content) {
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: center !important;
-  align-items: center !important;
+/* Configuração do Modo Invertido (Fundo Preto com Letras Brancas Lípidas) */
+.inverted-contrast {
+  --background: #000000 !important;
+  --foreground: #ffffff !important;
+  --card: #000000 !important;
+  --border: #ffffff !important;
+  --muted-foreground: #e5e5e5 !important;
+  --primary: #ffffff !important;
+  --primary-foreground: #000000 !important;
+  --secondary: #171717 !important;
 }
 
-/* Restringe a largura máxima APENAS da caixa de login */
-body:has(#auth-content) main,
-body:has(#auth-content) #auth-content,
-body:has(#auth-content) .flex-1 {
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: center !important;
-  align-items: center !important;
-  width: 100% !important;
-  max-width: 450px !important; /* Limite perfeito para o Card de Login */
-  margin: 0 auto !important;
-}
-
-/* ──────────────────────────────────────────────────────────────────────────
-   ESTILOS DO MURAL DE AVISOS (PÓS-LOGIN)
-   Garante que quando o usuário logar, os cards usem o espaço total disponível
-   ────────────────────────────────────────────────────────────────────────── */
-body:not(:has(#auth-content)) main {
-  width: 100% !important;
-  max-width: 1280px !important; /* Largura ideal para os cards respirarem */
-  margin: 0 auto !important;
-  padding: 24px !important;
-}
-
-/* Acessibilidade - Link para pular conteúdo */
-.skip-to-content {
-  position: absolute;
-  top: -100px;
-  left: 0;
-  background: #facc15;
-  color: #000000;
-  padding: 8px;
-  z-index: 100;
-  transition: top 0.2s;
-}
-.skip-to-content:focus {
-  top: 0;
+/* Deixa as tags kbd bonitas dentro da caixinha de ajuda */
+kbd {
+  box-shadow: 0 2px 0 rgba(255, 255, 255, 0.2);
+  display: inline-block;
+  white-space: nowrap;
 }
