@@ -1,14 +1,11 @@
 @import "tailwindcss";
 
 /* ==========================================================================
-   🎨 GERENCIAMENTO DOS TRÊS MODOS DE ACESSIBILIDADE VISUAL
+   🎨 SISTEMA COMPLETO DE ACESSIBILIDADE VISUAL DO MURAL
    ========================================================================== */
 
-/* 1️⃣ MODO ALTO CONTRASTE (Ativado pelo seu botão superior de Alto Contraste) */
-body:has([className*="contraste"]),
-.high-contrast,
-[data-theme="high-contrast"],
-html[style*="background"] {
+/* ─── 1️⃣ MODO ALTO CONTRASTE ─── */
+body.high-contrast {
   background-color: #000000 !important;
   color: #ffffff !important;
 
@@ -20,7 +17,7 @@ html[style*="background"] {
     box-shadow: none !important;
   }
 
-  /* Textos internos puramente brancos para contraste máximo */
+  /* Textos internos em branco absoluto para contraste máximo */
   & .accessibility-title,
   & .accessibility-text,
   & .accessibility-meta span,
@@ -29,14 +26,14 @@ html[style*="background"] {
     color: #ffffff !important;
   }
 
-  /* Ícones em branco */
+  /* Ícones e svg sem preenchimento em branco */
   & .accessibility-icon,
   & .accessibility-footer svg:not([fill="#facc15"]) {
     stroke: #ffffff !important;
     color: #ffffff !important;
   }
 
-  /* Distintivos superiores e tags em preto e amarelo */
+  /* Distintivos (badges) superiores e tags em preto com borda amarela */
   & .accessibility-badge,
   & .accessibility-tag {
     background-color: #000000 !important;
@@ -48,29 +45,27 @@ html[style*="background"] {
     background-color: #facc15 !important;
   }
 
-  /* Botão principal "Ver aviso" em amarelo */
+  /* Linha divisória interna do rodapé */
+  & .accessibility-footer {
+    border-top-color: #facc15 !important;
+  }
+
+  /* Botão principal de ação rápida "Ver aviso" em amarelo */
   & .accessibility-action-btn,
   & .accessibility-action-btn span,
   & .accessibility-action-btn svg {
     color: #facc15 !important;
     stroke: #facc15 !important;
   }
-
-  & .accessibility-footer {
-    border-top-color: #facc15 !important;
-  }
 }
 
-/* 2️⃣ MODO INVERTIDO (Filtro inteligente de inversão de matriz de cores) */
-body.inverted,
-body[data-theme="inverted"],
-.theme-inverted,
-html:has([className*="invertido"]) {
+/* ─── 2️⃣ MODO INVERTIDO ─── */
+body.inverted {
   filter: invert(1) hue-rotate(180deg);
+  background-color: #ffffff !important;
 }
 
-/* 3️⃣ MODO NORMAL (Padrão do Figma - Cores escuras estilizadas) */
-body.normal,
-body:not(.high-contrast):not(.inverted):not([data-theme="high-contrast"]) {
-  /* Mantém as cores padrão que você estruturou originalmente do Figma */
+/* ─── 3️⃣ MODO NORMAL ─── */
+body.normal {
+  /* Mantém as cores nativas e estilizações padrão que você trouxe do Figma */
 }
