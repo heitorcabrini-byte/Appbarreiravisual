@@ -1,3 +1,10 @@
-@import './fonts.css';
-@import './tailwind.css';
-@import './theme.css';
+@import "../default_shadcn_theme.css";
+@import "./fonts.css";
+@import "./theme.css";
+@import "./tailwind.css";
+
+/* Força o tema escuro padrão do Figma no plano de fundo do site */
+:root, html, body {
+  background-color: #0b0f19 !important;
+  color: #ffffff !important;
+}
