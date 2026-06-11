@@ -1,6 +1,5 @@
 import { useState } from 'react';
 
-// Tipagem baseada nos dados isolados do Figma
 interface Announcement {
   id: string;
   title: string;
@@ -17,10 +16,10 @@ interface AnnouncementCardProps {
 }
 
 export function AnnouncementCard({ announcement }: AnnouncementCardProps) {
-  // 🔄 Estado que controla se o aviso está expandido ou minimizado
+  // 🔄 Estado que controla se este card específico está expandido
   const [isExpanded, setIsExpanded] = useState(false);
 
-  // Mapeamento de cores de bordas/badges baseado na categoria
+  // Mapeamento de cores baseado na categoria para os badges
   const getCategoryStyles = (category: string) => {
     switch (category.toLowerCase()) {
       case 'urgente':
@@ -39,11 +38,13 @@ export function AnnouncementCard({ announcement }: AnnouncementCardProps) {
   return (
     <div 
       className={`w-full rounded-2xl border bg-[#0d1527] p-5 transition-all duration-300 flex flex-col justify-between ${styles.border} ${
-        isExpanded ? 'ring-2 ring-blue-500/50 shadow-lg shadow-blue-950/40 md:col-span-2 lg:col-span-3' : 'hover:border-slate-700'
+        isExpanded 
+          ? 'md:col-span-2 lg:col-span-3 ring-2 ring-blue-500/50 shadow-2xl bg-[#0f1b35]' 
+          : 'hover:border-slate-700'
       }`}
     >
       <div>
-        {/* Cabeçalho do Card: Categoria e Data */}
+        {/* Topo do Card */}
         <div className="flex items-center justify-between mb-3 text-xs">
           <span className={`px-2.5 py-1 rounded-md font-bold uppercase tracking-wider ${styles.bg} ${styles.text}`}>
             {announcement.emoji} {announcement.category}
@@ -53,21 +54,21 @@ export function AnnouncementCard({ announcement }: AnnouncementCardProps) {
           </span>
         </div>
 
-        {/* Título do Aviso */}
+        {/* Título */}
         <h2 className="text-lg font-bold text-white tracking-tight leading-snug">
           {announcement.title}
         </h2>
 
-        {/* 👁️ Conteúdo do Card - RESOLVIDO: Cores com alto contraste em relação ao fundo escuro */}
+        {/* 👁️ Conteúdo - RESOLVIDO: Cor 'text-slate-200' garante leitura perfeita sobre o fundo escuro */}
         <p className={`mt-3 text-sm text-slate-200 leading-relaxed font-normal ${
           isExpanded ? '' : 'line-clamp-3'
         }`}>
           {announcement.content}
         </p>
 
-        {/* Seções adicionais exibidas APENAS quando expandido */}
+        {/* Informações adicionais que aparecem APENAS ao expandir */}
         {isExpanded && (
-          <div className="mt-5 pt-4 border-t border-slate-800/60 animate-fadeIn">
+          <div className="mt-5 pt-4 border-t border-slate-800/60 transition-all duration-200">
             {announcement.author && (
               <p className="text-xs text-slate-400 font-medium flex items-center gap-1.5 mb-3">
                 <span>👤 Autor(a):</span>
@@ -91,7 +92,7 @@ export function AnnouncementCard({ announcement }: AnnouncementCardProps) {
         )}
       </div>
 
-      {/* Rodapé do Card com Ações de Controle */}
+      {/* Rodapé de Ações */}
       <div className="mt-5 pt-3 border-t border-slate-800/40 flex items-center justify-between">
         <div className="flex gap-4 text-xs text-slate-400 font-medium">
           <button className="hover:text-white transition-colors flex items-center gap-1">
@@ -102,16 +103,15 @@ export function AnnouncementCard({ announcement }: AnnouncementCardProps) {
           </button>
         </div>
 
-        {/* 🚀 Botão Interativo de Expansão / Retração */}
+        {/* 🚀 BOTÃO INTERATIVO COM FUNÇÃO CLIQUE CONFIGURADA */}
         <button
           onClick={() => setIsExpanded(!isExpanded)}
-          className="text-sm font-bold text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-1 focus:outline-none focus:underline"
-          aria-expanded={isExpanded}
+          className="text-sm font-bold text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-1 cursor-pointer"
         >
           {isExpanded ? (
             <>Voltar ao normal ↩️</>
           ) : (
-            <>Ver aviso <span className="inline-block transition-transform duration-200 group-hover:translate-x-0.5">❯</span></>
+            <>Ver aviso <span>❯</span></>
           )}
         </button>
       </div>
