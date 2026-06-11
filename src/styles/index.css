@@ -1,37 +1,48 @@
 @import "tailwindcss";
 
-@import './fonts.css';
-@import './theme.css';
-@import './tailwind.css';
+/* ──────────────────────────────────────────────────────────────────────────
+   CONFIGURAÇÕES GOBAL / ALINHAMENTO DO APP
+   ────────────────────────────────────────────────────────────────────────── */
 
-/* Força o navegador inteiro e o container do React a se alinharem ao centro */
 html, body, #root {
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: center !important;
-  align-items: center !important;
-  min-height: 100vh !important;
-  width: 100% !important;
-  background-color: #0b0f19 !important;
-  color: #ffffff !important;
-  margin: 0 !important;
-  padding: 0 !important;
+  min-height: 100vh;
+  width: 100%;
+  margin: 0;
+  padding: 0;
   box-sizing: border-box;
+  background-color: #0b0f19; /* Fundo escuro oficial */
+  color: #ffffff;
 }
 
-/* Garante que a tela de login e o mural fiquem centralizados como um bloco único */
-main, #auth-content, .flex-1 {
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: center !important;
-  align-items: center !important;
-  width: 100% !important;
-  max-width: 460px !important; /* Tamanho padrão de caixas de login do Figma */
-  margin: 0 auto !important;
-  padding: 16px !important;
+/* Se você quiser centralizar a tela inteira de Login verticalmente e horizontalmente,
+  deixando-a igualzinha à caixa do Figma quando o usuário deslogado acessar:
+*/
+body:has(#auth-content) {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }
 
-/* Garante que o cartão de login ocupe a largura correta do bloco */
-main > div, .w-full {
-  width: 100% !important;
+/* Evita que o contêiner do formulário passe do tamanho ideal de um card */
+#auth-content {
+  width: 100%;
+  max-width: 440px;
+  margin: 0 auto;
+}
+
+/* Estilo para links de acessibilidade (Skip to content) */
+.skip-to-content {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  background: #facc15;
+  color: #000000;
+  padding: 8px;
+  z-index: 100;
+  transition: top 0.2s;
+}
+
+.skip-to-content:focus {
+  top: 0;
 }
