@@ -1,13 +1,12 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react';
-import tailwindcss from '@tailwindcss/vite'; // <--- Importa o compilador do Tailwind v4
+import tailwindcss from '@tailwindcss/vite'; // <--- O plugin que substitui tudo
 import path from 'path';
 
-// https://vite.dev/config/
 export default defineConfig({
   plugins: [
     react(),
-    tailwindcss(), // <--- Ativa o Tailwind dentro do Vite
+    tailwindcss(), // <--- Ele cuida de compilar o CSS sem precisar de PostCSS
   ],
   base: '/Appbarreiravisual/',
   resolve: {
