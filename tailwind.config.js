@@ -1,6 +1,6 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  darkMode: ["class"], // Ativa o modo escuro que o Figma usa
+  darkMode: ["class"],
   content: [
     "./index.html",
     "./default_shadcn_theme.css",
