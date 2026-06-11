@@ -77,7 +77,7 @@ export function Header({
             <div
               aria-live="polite"
               aria-atomic="true"
-              className="hidden items-center justify-center border-x border-border px-2 sm:flex"
+             className="flex items-center justify-center border-x border-border px-2"
               style={{ minWidth: '3rem', fontSize: '0.8rem' }}
             >
               <span className="sr-only">Tamanho da fonte:</span>
