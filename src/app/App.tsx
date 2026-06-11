@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import LoginScreen from './components/LoginScreen';
+import LoginScreen from './components/LoginScreen'; // Caminho relativo correto dentro de src/app/
 import { Header } from './components/Header';
 import { FilterSearchBar } from './components/FilterSearchBar';
 import { AnnouncementCard } from './components/AnnouncementCard';
@@ -76,10 +76,10 @@ export default function App() {
               <p className="text-sm text-slate-400 mt-1">Acompanhe comunicados, eventos e informações importantes da escola.</p>
             </div>
 
-            {/* Mantém a barra de filtros original intocada */}
+            {/* Barra de filtros original */}
             <FilterSearchBar />
 
-            {/* Grid dos Cards recuperando a formatação original do seu projeto */}
+            {/* Grid dos Cards formatado */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
               <AnnouncementCard />
             </div>
