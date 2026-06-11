@@ -1,203 +1,125 @@
-import { useState, useEffect } from 'react';
-import LoginScreen from './components/LoginScreen'; 
-import { Header } from './components/Header';
-import { FilterSearchBar } from './components/FilterSearchBar';
-import { AnnouncementCard } from './components/AnnouncementCard';
+import { Volume2, Star, ChevronRight, Calendar, User } from 'lucide-react';
 
-type ContrastMode = 'normal' | 'high-contrast' | 'inverted';
+interface AnnouncementCardProps {
+  announcement: {
+    id: string;
+    title: string;
+    content: string;
+    category: string;
+    date: string;
+    author?: string;
+    tags?: string[];
+    emoji?: string;
+  };
+}
 
-// 📋 DADOS REAIS EXTRAÍDOS DO SEU PRINT DO FIGMA
-const ANNOUNCEMENTS_DATA = [
-  {
-    id: '1',
-    title: 'Suspensão das Aulas — Quinta-feira 28/05',
-    content: 'As aulas do dia 28/05 estão suspensas em razão das fortes chuvas previstas para a região.',
-    category: 'Urgente',
-    date: '27 de maio de 2026',
-    author: 'Profª Maria Helena Souza',
-    tags: ['cancelamento', 'chuvas', 'comunicado'],
-    emoji: '🚨'
-  },
-  {
-    id: '2',
-    title: 'Reunião Extraordinária de Pais — Hoje às 19h',
-    content: 'Convocamos todos os responsáveis para reunião urgente sobre o calendário do 2º semestre.',
-    category: 'Urgente',
-    date: '27 de maio de 2026',
-    author: 'Secretaria Escolar',
-    tags: ['reunião', 'pais', 'urgente'],
-    emoji: '🚨'
-  },
-  {
-    id: '3',
-    title: 'Entrega de Boletins — 1º Bimestre 2026',
-    content: 'Os boletins do 1º bimestre estarão disponíveis para retirada a partir de 30/05.',
-    category: 'Importante',
-    date: '26 de maio de 2026',
-    author: 'Coordenação Pedagógica',
-    tags: ['boletins', 'notas', 'bimestre'],
-    emoji: '⚠️'
-  },
-  {
-    id: '4',
-    title: 'Novo Horário de Funcionamento da Biblioteca',
-    content: 'A biblioteca passa a funcionar de segunda a sexta das 7h às 20h a partir de junho.',
-    category: 'Geral',
-    date: '23 de maio de 2026',
-    author: 'Bibliotecária Fernanda Lopes',
-    tags: ['biblioteca', 'horário', 'serviços'],
-    emoji: '📘'
-  }
-];
+export function AnnouncementCard({ announcement }: AnnouncementCardProps) {
+  const { title, content, category, date, author = "Secretaria Escolar", tags = [] } = announcement;
 
-export default function App() {
-  const [session, setSession] = useState<any>(null);
-  const [currentScreen, setCurrentScreen] = useState<'login' | 'register'>('login');
-  
-  const [fontSize, setFontSize] = useState(16); // Base 16px padrão de navegadores
-  const [contrastMode, setContrastMode] = useState<ContrastMode>('normal');
-  const [showKeyboardHelp, setShowKeyboardHelp] = useState(false);
-
-  const [filter, setFilter] = useState<string>('todos');
-  const [search, setSearch] = useState('');
-  const [sort, setSort] = useState<string>('recente');
-
-  const minFont = 12;
-  const maxFont = 24;
-
-  // ⌨️ Escuta de atalhos globais
-  useEffect(() => {
-    const handleGlobalKeyDown = (e: KeyboardEvent) => {
-      if (e.altKey && e.key === '1') {
-        e.preventDefault();
-        setFontSize(f => Math.min(f + 2, maxFont));
-      }
-      if (e.altKey && e.key === '2') {
-        e.preventDefault();
-        setFontSize(f => Math.max(f - 2, minFont));
-      }
-      if (e.altKey && e.key === '3') {
-        e.preventDefault();
-        cycleContrast();
-      }
-      if (e.altKey && e.key === '4') {
-        e.preventDefault();
-        setShowKeyboardHelp(prev => !prev);
-      }
-    };
-    window.addEventListener('keydown', handleGlobalKeyDown);
-    return () => window.removeEventListener('keydown', handleGlobalKeyDown);
-  }, [contrastMode]);
-
-  // ⚡ SOLUÇÃO DO ZOOM: Atualiza a fonte na raiz HTML para o Tailwind recalcular todas as classes
-  useEffect(() => {
-    const root = document.documentElement;
-    root.style.fontSize = `${fontSize}px`;
-    
-    root.classList.remove('high-contrast', 'inverted-contrast');
-    if (contrastMode === 'high-contrast') root.classList.add('high-contrast');
-    if (contrastMode === 'inverted') root.classList.add('inverted-contrast');
-  }, [fontSize, contrastMode]);
-
-  const handleFontIncrease = () => setFontSize(f => Math.min(f + 2, maxFont));
-  const handleFontDecrease = () => setFontSize(f => Math.max(f - 2, minFont));
-  
-  const cycleContrast = () => {
-    setContrastMode(prev => {
-      if (prev === 'normal') return 'high-contrast';
-      if (prev === 'high-contrast') return 'inverted';
-      return 'normal';
-    });
+  // Mapeamento preciso de cores e estilos baseado no Figma
+  const themeStyles: Record<string, { bg: string; border: string; badge: string; dot: string }> = {
+    urgente: {
+      bg: 'bg-[#1e1215]',
+      border: 'border-red-900/40 hover:border-red-500/50',
+      badge: 'bg-red-500/10 text-red-400 border-red-500/20',
+      dot: 'bg-red-500',
+    },
+    importante: {
+      bg: 'bg-[#1c1712]',
+      border: 'border-amber-900/40 hover:border-amber-500/50',
+      badge: 'bg-amber-500/10 text-amber-400 border-amber-500/20',
+      dot: 'bg-amber-500',
+    },
+    informativo: {
+      bg: 'bg-[#111916]',
+      border: 'border-emerald-900/40 hover:border-emerald-500/50',
+      badge: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20',
+      dot: 'bg-emerald-500',
+    },
+    geral: {
+      bg: 'bg-[#121622]',
+      border: 'border-blue-900/40 hover:border-blue-500/50',
+      badge: 'bg-blue-500/10 text-blue-400 border-blue-500/20',
+      dot: 'bg-blue-500',
+    },
   };
 
-  const filteredAnnouncements = ANNOUNCEMENTS_DATA.filter(item => {
-    const categoryStr = item?.category || 'Geral';
-    const titleStr = item?.title || '';
-    const contentStr = item?.content || '';
-
-    const matchesFilter = filter === 'todos' || categoryStr.toLowerCase() === filter.toLowerCase();
-    const matchesSearch = 
-      titleStr.toLowerCase().includes(search.toLowerCase()) ||
-      contentStr.toLowerCase().includes(search.toLowerCase()) ||
-      categoryStr.toLowerCase().includes(search.toLowerCase());
-    return matchesFilter && matchesSearch;
-  });
-
-  const sortedAnnouncements = [...filteredAnnouncements].sort((a, b) => b.id.localeCompare(a.id));
+  const currentTheme = themeStyles[category.toLowerCase()] || themeStyles['geral'];
 
   return (
-    <div className="min-h-screen bg-[#060b13] text-white antialiased transition-colors duration-200">
-      {!session ? (
-        <LoginScreen
-          fontSize={fontSize}
-          contrastMode={contrastMode}
-          showKeyboardHelp={showKeyboardHelp}
-          setShowKeyboardHelp={setShowKeyboardHelp}
-          onFontIncrease={handleFontIncrease}
-          onFontDecrease={handleFontDecrease}
-          onCycleContrast={cycleContrast}
-          onLoginSuccess={(userSession) => setSession(userSession)}
-          currentScreen={currentScreen}
-          setCurrentScreen={setCurrentScreen}
-        />
-      ) : (
-        <div className="min-h-screen">
-          <Header 
-            fontSize={fontSize}
-            contrastMode={contrastMode}
-            onFontIncrease={handleFontIncrease}
-            onFontDecrease={handleFontDecrease}
-            onCycleContrast={cycleContrast}
-            onLogout={() => setSession(null)}
-            showKeyboardHelp={showKeyboardHelp}
-            setShowKeyboardHelp={setShowKeyboardHelp}
-          />
-
-          <main className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-            <div className="mb-8">
-              <span className="text-xs font-bold uppercase tracking-widest text-blue-500">
-                Escola Estadual Dom Pedro II
-              </span>
-              <h1 className="text-3xl font-black mt-1 tracking-tight text-white">
-                Mural de Avisos
-              </h1>
-              <p className="text-sm text-slate-400 mt-2">
-                Acompanhe comunicados, eventos e informações importantes da escola.
-              </p>
-            </div>
-
-            {showKeyboardHelp && (
-              <div className="mb-6 p-4 rounded-xl border bg-blue-950/20 border-blue-800/30 text-xs text-slate-300">
-                <p className="font-bold text-blue-400 mb-1">⌨️ Atalhos rápidos:</p>
-                <p>Alt+1: Aumentar Texto | Alt+2: Diminuir Texto | Alt+3: Trocar Contraste | Alt+4: Fechar guia</p>
-              </div>
-            )}
-
-            <FilterSearchBar 
-              filter={filter}
-              search={search}
-              sort={sort}
-              resultCount={sortedAnnouncements.length}
-              onFilterChange={setFilter}
-              onSearchChange={setSearch}
-              onSortChange={setSort}
-              highContrast={contrastMode === 'high-contrast'}
-            />
-
-            {sortedAnnouncements.length === 0 ? (
-              <div className="text-center py-16 text-slate-500 text-sm border border-dashed border-slate-800 rounded-2xl mt-8">
-                Nenhum aviso encontrado para os filtros selecionados.
-              </div>
-            ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-                {sortedAnnouncements.map((announcement) => (
-                  <AnnouncementCard key={announcement.id} announcement={announcement} />
-                ))}
-              </div>
-            )}
-          </main>
+    <article 
+      className={`flex flex-col justify-between rounded-2xl border p-5 transition-all duration-200 shadow-xl ${currentTheme.bg} ${currentTheme.border}`}
+    >
+      <div>
+        {/* Topo do Card */}
+        <div className="flex items-center justify-between gap-2 mb-4">
+          <span className={`inline-flex items-center gap-1 rounded-md border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider ${currentTheme.badge}`}>
+            {category}
+          </span>
+          <div className={`h-2 w-2 rounded-full ${currentTheme.dot}`} />
         </div>
-      )}
-    </div>
+        
+        {/* Título */}
+        <h3 className="text-base font-bold text-white tracking-tight leading-snug mb-2">
+          {title}
+        </h3>
+        
+        {/* Conteúdo */}
+        <p className="text-xs text-slate-300 leading-relaxed mb-4 line-clamp-3">
+          {content}
+        </p>
+
+        {/* Metadados */}
+        <div className="flex flex-col gap-1.5 text-[11px] text-slate-400 mb-4">
+          <div className="flex items-center gap-1.5">
+            <Calendar size={12} className="text-slate-500" />
+            <span>{date}</span>
+          </div>
+          <div className="flex items-center gap-1.5">
+            <User size={12} className="text-slate-500" />
+            <span>{author}</span>
+          </div>
+        </div>
+
+        {/* Tags */}
+        {tags.length > 0 && (
+          <div className="flex flex-wrap gap-1.5 mb-5">
+            {tags.map((tag) => (
+              <span key={tag} className="text-[10px] text-slate-400 bg-slate-900/60 border border-slate-800/80 px-2 py-0.5 rounded-md">
+                #{tag}
+              </span>
+            ))}
+          </div>
+        )}
+      </div>
+
+      {/* Ações Inferiores */}
+      <div className="pt-3 border-t border-slate-800/60 flex items-center justify-between text-xs text-slate-400">
+        <div className="flex items-center gap-4">
+          <button 
+            type="button"
+            className="flex items-center gap-1 hover:text-white transition-colors cursor-pointer"
+          >
+            <Volume2 size={14} className="text-slate-400" />
+            <span>Ouvir</span>
+          </button>
+          <button 
+            type="button"
+            className="flex items-center gap-1 hover:text-white transition-colors cursor-pointer"
+          >
+            <Star size={14} className="text-slate-400" />
+            <span>Salvar</span>
+          </button>
+        </div>
+
+        <button 
+          type="button"
+          className="flex items-center gap-0.5 font-bold text-blue-400 hover:text-blue-300 transition-colors cursor-pointer"
+        >
+          <span>Ver aviso</span>
+          <ChevronRight size={14} />
+        </button>
+      </div>
+    </article>
   );
 }
