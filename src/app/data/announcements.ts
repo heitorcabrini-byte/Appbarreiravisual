@@ -1,6 +1,15 @@
 export type FilterOption = 'todos' | 'urgente' | 'importante' | 'geral' | 'informativo';
 export type SortOption = 'recente' | 'antigo';
 
+// 🔍 Adicionado para corrigir o erro de importação do FilterSearchBar
+export const FILTER_OPTIONS: { value: FilterOption; label: string }[] = [
+  { value: 'todos', label: 'Todos' },
+  { value: 'urgente', label: 'Urgente' },
+  { value: 'importante', label: 'Importante' },
+  { value: 'geral', label: 'Geral' },
+  { value: 'informativo', label: 'Informativo' }
+];
+
 export interface Announcement {
   id: string;
   title: string;
