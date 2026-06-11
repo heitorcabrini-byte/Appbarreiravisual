@@ -102,4 +102,126 @@ export default function App() {
   
   const cycleContrast = () => {
     setContrastMode(prev => {
-      if
+      if (prev === 'normal') return 'high-contrast';
+      if (prev === 'high-contrast') return 'inverted';
+      return 'normal';
+    });
+  };
+
+  // 🔍 SISTEMA DE FILTRAGEM DINÂMICA
+  const filteredAnnouncements = ANNOUNCEMENTS_DATA.filter(item => {
+    const matchesFilter = filter === 'todos' || item.category.toLowerCase() === filter.toLowerCase();
+    const matchesSearch = 
+      item.title.toLowerCase().includes(search.toLowerCase()) ||
+      item.content.toLowerCase().includes(search.toLowerCase()) ||
+      item.category.toLowerCase().includes(search.toLowerCase());
+    return matchesFilter && matchesSearch;
+  });
+
+  // Ordenação
+  const sortedAnnouncements = [...filteredAnnouncements].sort((a, b) => {
+    if (sort === 'antigo') {
+      return new Date(a.date.split('/').reverse().join('-')).getTime() - new Date(b.date.split('/').reverse().join('-')).getTime();
+    }
+    return new Date(b.date.split('/').reverse().join('-')).getTime() - new Date(a.date.split('/').reverse().join('-')).getTime();
+  });
+
+  return (
+    <div style={{ fontSize: `${fontSize}px` }} className="min-h-screen transition-colors bg-[#0b121f] text-white">
+      {!session ? (
+        <LoginScreen
+          fontSize={fontSize}
+          contrastMode={contrastMode}
+          showKeyboardHelp={showKeyboardHelp}
+          setShowKeyboardHelp={setShowKeyboardHelp}
+          onFontIncrease={handleFontIncrease}
+          onFontDecrease={handleFontDecrease}
+          onCycleContrast={cycleContrast}
+          onLoginSuccess={(userSession) => setSession(userSession)}
+          currentScreen={currentScreen}
+          setCurrentScreen={setCurrentScreen}
+        />
+      ) : (
+        <div className="min-h-screen bg-[#0b121f] text-white transition-colors" style={{ fontSize: '1em' }}>
+          {/* Header conectado com os controles reais */}
+          <Header 
+            fontSize={fontSize}
+            contrastMode={contrastMode}
+            onFontIncrease={handleFontIncrease}
+            onFontDecrease={handleFontDecrease}
+            onCycleContrast={cycleContrast}
+            onLogout={() => setSession(null)}
+            showKeyboardHelp={showKeyboardHelp}
+            setShowKeyboardHelp={setShowKeyboardHelp}
+          />
+
+          <main className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8" style={{ fontSize: '1em' }}>
+            <div className="mb-6 mt-4">
+              <span className="font-bold uppercase tracking-wider text-blue-400" style={{ fontSize: '0.75em' }}>
+                Escola Estadual Dom Pedro II
+              </span>
+              <h1 className="font-extrabold mt-1 text-white" style={{ fontSize: '2em' }}>
+                Mural de Avisos
+              </h1>
+              <p className="text-slate-400 mt-1" style={{ fontSize: '0.9em' }}>
+                Acompanhe comunicados, eventos e informações importantes da escola.
+              </p>
+            </div>
+
+            {/* Painel de ajuda de teclado acessível com fontes relativas */}
+            {showKeyboardHelp && (
+              <div 
+                role="region" 
+                aria-label="Guia de atalhos rápidos" 
+                className="mb-6 p-5 rounded-2xl border bg-blue-950/20 border-blue-800/40 text-slate-200"
+              >
+                <h2 className="font-bold text-blue-400 uppercase tracking-wider mb-3 flex items-center gap-2" style={{ fontSize: '0.85em' }}>
+                  ⌨️ Atalhos de Acessibilidade do Sistema
+                </h2>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3" style={{ fontSize: '0.8em' }}>
+                  <div className="bg-slate-900/80 p-3 rounded-xl border border-slate-800/80">
+                    <kbd className="bg-slate-800 px-1.5 py-0.5 rounded text-white font-mono mr-1.5 shadow">Alt + 1</kbd> Aumentar Letra
+                  </div>
+                  <div className="bg-slate-900/80 p-3 rounded-xl border border-slate-800/80">
+                    <kbd className="bg-slate-800 px-1.5 py-0.5 rounded text-white font-mono mr-1.5 shadow">Alt + 2</kbd> Diminuir Letra
+                  </div>
+                  <div className="bg-slate-900/80 p-3 rounded-xl border border-slate-800/80">
+                    <kbd className="bg-slate-800 px-1.5 py-0.5 rounded text-white font-mono mr-1.5 shadow">Alt + 3</kbd> Mudar Contraste
+                  </div>
+                  <div className="bg-slate-900/80 p-3 rounded-xl border border-slate-800/80">
+                    <kbd className="bg-slate-800 px-1.5 py-0.5 rounded text-white font-mono mr-1.5 shadow">Alt + 4</kbd> Fechar Guia
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Barra de pesquisa atualizando em tempo real */}
+            <FilterSearchBar 
+              filter={filter}
+              search={search}
+              sort={sort}
+              resultCount={sortedAnnouncements.length}
+              onFilterChange={setFilter}
+              onSearchChange={setSearch}
+              onSortChange={setSort}
+              highContrast={contrastMode === 'high-contrast'}
+            />
+
+            {/* Grid Renderizando os Mocks Dinâmicos */}
+            {sortedAnnouncements.length === 0 ? (
+              <div className="text-center py-12 text-slate-500" style={{ fontSize: '0.9em' }}>
+                Nenhum aviso encontrado para os filtros selecionados.
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
+                {sortedAnnouncements.map((announcement) => (
+                  <AnnouncementCard key={announcement.id} announcement={announcement} />
+                ))}
+              </div>
+            )}
+          </main>
+        </div>
+      )}
+    </div>
+  );
+}
