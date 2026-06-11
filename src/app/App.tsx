@@ -6,96 +6,98 @@ import { AnnouncementCard } from './components/AnnouncementCard';
 
 type ContrastMode = 'normal' | 'high-contrast' | 'inverted';
 
-// 📋 DADOS REAIS DO FIGMA INJETADOS DIRETO AQUI
+// 📋 DADOS REAIS E COMPLETOS EXTRAÍDOS DO SEU FIGMA
 const ANNOUNCEMENTS_DATA = [
   {
     id: '1',
-    title: 'Período de Rematrícula Escolar 2026',
-    content: 'Atenção responsáveis! O prazo para renovação de matrícula para o segundo semestre já está aberto. Os documentos necessários devem ser entregues diretamente na secretaria ou enviados pelo portal do aluno até o dia 30/06.',
+    title: 'Suspensão das Aulas — Quinta-feira 28/05',
+    content: 'As aulas do dia 28/05 estão suspensas em razão das fortes chuvas previstas para a região.',
     category: 'Urgente',
-    date: '11/06/2026',
+    date: '27 de maio de 2026',
+    author: 'Profª Maria Helena Souza',
+    tags: ['cancelamento', 'chuvas', 'comunicado'],
     emoji: '🚨'
   },
   {
     id: '2',
-    title: 'Reunião de Pais e Mestres do 2º Bimestre',
-    content: 'Convidamos todos os pais e responsáveis para a nossa reunião bimestral que acontecerá neste sábado, das 09h às 12h. Será uma excelente oportunidade para discutir o desempenho acadêmico e a entrega de boletins.',
-    category: 'Importante',
-    date: '10/06/2026',
-    emoji: '📅'
+    title: 'Reunião Extraordinária de Pais — Hoje às 19h',
+    content: 'Convocamos todos os responsáveis para reunião urgente sobre o calendário do 2º semestre.',
+    category: 'Urgente',
+    date: '27 de maio de 2026',
+    author: 'Secretaria Escolar',
+    tags: ['reunião', 'pais', 'urgente'],
+    emoji: '🚨'
   },
   {
     id: '3',
-    title: 'Feira de Ciências Interdisciplinar',
-    content: 'Estão abertas as inscrições para os projetos da Feira de Ciências deste ano! O tema central será "Sustentabilidade e Tecnologia no Cotidiano". Procure seu professor de biologia ou física para registrar seu grupo.',
-    category: 'Informativo',
-    date: '08/06/2026',
-    emoji: '📢'
+    title: 'Entrega de Boletins — 1º Bimestre 2026',
+    content: 'Os boletins do 1º bimestre estarão disponíveis para retirada a partir de 30/05.',
+    category: 'Importante',
+    date: '26 de maio de 2026',
+    author: 'Coordenação Pedagógica',
+    tags: ['boletins', 'notas', 'bimestre'],
+    emoji: '⚠️'
   },
   {
     id: '4',
-    title: 'Manutenção do Bloco B e Laboratórios',
-    content: 'Informamos que o Bloco B passará por manutenções preventivas na rede elétrica durante o próximo final de semana. O acesso aos laboratórios de informática estará suspenso temporariamente.',
+    title: 'Novo Horário de Funcionamento da Biblioteca',
+    content: 'A biblioteca passa a funcionar de segunda a sexta das 7h às 20h a partir de junho.',
     category: 'Geral',
-    date: '05/06/2026',
-    emoji: 'ℹ️'
+    date: '23 de maio de 2026',
+    author: 'Bibliotecária Fernanda Lopes',
+    tags: ['biblioteca', 'horário', 'serviços'],
+    emoji: '📘'
   }
 ];
 
 export default function App() {
-  // Controle de Sessão e Telas
   const [session, setSession] = useState<any>(null);
   const [currentScreen, setCurrentScreen] = useState<'login' | 'register'>('login');
   
-  // Estados Globais de Acessibilidade
-  const [fontSize, setFontSize] = useState(18);
+  const [fontSize, setFontSize] = useState(16); // Base padrão do navegador (16px)
   const [contrastMode, setContrastMode] = useState<ContrastMode>('normal');
   const [showKeyboardHelp, setShowKeyboardHelp] = useState(false);
 
-  // Estados dos Filtros do Mural
   const [filter, setFilter] = useState<string>('todos');
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState<string>('recente');
 
-  const minFont = 14;
-  const maxFont = 26;
+  const minFont = 12;
+  const maxFont = 24;
 
-  // ⌨️ Escuta Global de Atalhos de Teclado
+  // ⌨️ Escuta Global de Atalhos
   useEffect(() => {
     const handleGlobalKeyDown = (e: KeyboardEvent) => {
-      // Alt + 1: Aumentar Fonte
       if (e.altKey && e.key === '1') {
         e.preventDefault();
         setFontSize(f => Math.min(f + 2, maxFont));
       }
-      // Alt + 2: Diminuir Fonte
       if (e.altKey && e.key === '2') {
         e.preventDefault();
         setFontSize(f => Math.max(f - 2, minFont));
       }
-      // Alt + 3: Alternar Contraste
       if (e.altKey && e.key === '3') {
         e.preventDefault();
         cycleContrast();
       }
-      // Alt + 4: Ajuda de Teclado
       if (e.altKey && e.key === '4') {
         e.preventDefault();
         setShowKeyboardHelp(prev => !prev);
       }
     };
-
     window.addEventListener('keydown', handleGlobalKeyDown);
     return () => window.removeEventListener('keydown', handleGlobalKeyDown);
   }, [contrastMode]);
 
-  // Sincroniza classes CSS de Contraste no elemento raiz (HTML)
+  // 🔥 SOLUÇÃO DO ZOOM: Atualiza a fonte direto na raiz HTML para o Tailwind recalcular tudo!
   useEffect(() => {
     const root = document.documentElement;
+    root.style.fontSize = `${fontSize}px`;
+    
     root.classList.remove('high-contrast', 'inverted-contrast');
     if (contrastMode === 'high-contrast') root.classList.add('high-contrast');
     if (contrastMode === 'inverted') root.classList.add('inverted-contrast');
-  }, [contrastMode]);
+  }, [fontSize, contrastMode]);
 
   const handleFontIncrease = () => setFontSize(f => Math.min(f + 2, maxFont));
   const handleFontDecrease = () => setFontSize(f => Math.max(f - 2, minFont));
@@ -108,26 +110,26 @@ export default function App() {
     });
   };
 
-  // 🔍 SISTEMA DE FILTRAGEM DINÂMICA
   const filteredAnnouncements = ANNOUNCEMENTS_DATA.filter(item => {
-    const matchesFilter = filter === 'todos' || item.category.toLowerCase() === filter.toLowerCase();
+    // Evita o erro de undefined verificando se o campo existe de forma segura
+    const categoryStr = item?.category || 'Geral';
+    const titleStr = item?.title || '';
+    const contentStr = item?.content || '';
+
+    const matchesFilter = filter === 'todos' || categoryStr.toLowerCase() === filter.toLowerCase();
     const matchesSearch = 
-      item.title.toLowerCase().includes(search.toLowerCase()) ||
-      item.content.toLowerCase().includes(search.toLowerCase()) ||
-      item.category.toLowerCase().includes(search.toLowerCase());
+      titleStr.toLowerCase().includes(search.toLowerCase()) ||
+      contentStr.toLowerCase().includes(search.toLowerCase()) ||
+      categoryStr.toLowerCase().includes(search.toLowerCase());
     return matchesFilter && matchesSearch;
   });
 
-  // Ordenação
   const sortedAnnouncements = [...filteredAnnouncements].sort((a, b) => {
-    if (sort === 'antigo') {
-      return new Date(a.date.split('/').reverse().join('-')).getTime() - new Date(b.date.split('/').reverse().join('-')).getTime();
-    }
-    return new Date(b.date.split('/').reverse().join('-')).getTime() - new Date(a.date.split('/').reverse().join('-')).getTime();
+    return b.id.localeCompare(a.id); // Ordenação simples por ID/recente
   });
 
   return (
-    <div style={{ fontSize: `${fontSize}px` }} className="min-h-screen transition-colors bg-[#0b121f] text-white">
+    <div className="min-h-screen bg-[#060b13] text-white antialiased transition-colors duration-200">
       {!session ? (
         <LoginScreen
           fontSize={fontSize}
@@ -142,8 +144,7 @@ export default function App() {
           setCurrentScreen={setCurrentScreen}
         />
       ) : (
-        <div className="min-h-screen bg-[#0b121f] text-white transition-colors" style={{ fontSize: '1em' }}>
-          {/* Header conectado com os controles reais */}
+        <div className="min-h-screen">
           <Header 
             fontSize={fontSize}
             contrastMode={contrastMode}
@@ -155,47 +156,26 @@ export default function App() {
             setShowKeyboardHelp={setShowKeyboardHelp}
           />
 
-          <main className="max-w-7xl mx-auto p-4 sm:p-6 lg:p-8" style={{ fontSize: '1em' }}>
-            <div className="mb-6 mt-4">
-              <span className="font-bold uppercase tracking-wider text-blue-400" style={{ fontSize: '0.75em' }}>
+          <main className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+            <div className="mb-8">
+              <span className="text-xs font-bold uppercase tracking-widest text-blue-500">
                 Escola Estadual Dom Pedro II
               </span>
-              <h1 className="font-extrabold mt-1 text-white" style={{ fontSize: '2em' }}>
+              <h1 className="text-3xl font-black mt-1 tracking-tight text-white">
                 Mural de Avisos
               </h1>
-              <p className="text-slate-400 mt-1" style={{ fontSize: '0.9em' }}>
+              <p className="text-sm text-slate-400 mt-2">
                 Acompanhe comunicados, eventos e informações importantes da escola.
               </p>
             </div>
 
-            {/* Painel de ajuda de teclado acessível com fontes relativas */}
             {showKeyboardHelp && (
-              <div 
-                role="region" 
-                aria-label="Guia de atalhos rápidos" 
-                className="mb-6 p-5 rounded-2xl border bg-blue-950/20 border-blue-800/40 text-slate-200"
-              >
-                <h2 className="font-bold text-blue-400 uppercase tracking-wider mb-3 flex items-center gap-2" style={{ fontSize: '0.85em' }}>
-                  ⌨️ Atalhos de Acessibilidade do Sistema
-                </h2>
-                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3" style={{ fontSize: '0.8em' }}>
-                  <div className="bg-slate-900/80 p-3 rounded-xl border border-slate-800/80">
-                    <kbd className="bg-slate-800 px-1.5 py-0.5 rounded text-white font-mono mr-1.5 shadow">Alt + 1</kbd> Aumentar Letra
-                  </div>
-                  <div className="bg-slate-900/80 p-3 rounded-xl border border-slate-800/80">
-                    <kbd className="bg-slate-800 px-1.5 py-0.5 rounded text-white font-mono mr-1.5 shadow">Alt + 2</kbd> Diminuir Letra
-                  </div>
-                  <div className="bg-slate-900/80 p-3 rounded-xl border border-slate-800/80">
-                    <kbd className="bg-slate-800 px-1.5 py-0.5 rounded text-white font-mono mr-1.5 shadow">Alt + 3</kbd> Mudar Contraste
-                  </div>
-                  <div className="bg-slate-900/80 p-3 rounded-xl border border-slate-800/80">
-                    <kbd className="bg-slate-800 px-1.5 py-0.5 rounded text-white font-mono mr-1.5 shadow">Alt + 4</kbd> Fechar Guia
-                  </div>
-                </div>
+              <div className="mb-6 p-4 rounded-xl border bg-blue-950/20 border-blue-800/30 text-xs text-slate-300">
+                <p className="font-bold text-blue-400 mb-2">⌨️ Atalhos rápidos:</p>
+                <p>Alt+1: Aumentar Texto | Alt+2: Diminuir Texto | Alt+3: Contraste | Alt+4: Fechar guia</p>
               </div>
             )}
 
-            {/* Barra de pesquisa atualizando em tempo real */}
             <FilterSearchBar 
               filter={filter}
               search={search}
@@ -207,9 +187,8 @@ export default function App() {
               highContrast={contrastMode === 'high-contrast'}
             />
 
-            {/* Grid Renderizando os Mocks Dinâmicos */}
             {sortedAnnouncements.length === 0 ? (
-              <div className="text-center py-12 text-slate-500" style={{ fontSize: '0.9em' }}>
+              <div className="text-center py-16 text-slate-500 text-sm border border-dashed border-slate-800 rounded-2xl mt-8">
                 Nenhum aviso encontrado para os filtros selecionados.
               </div>
             ) : (
