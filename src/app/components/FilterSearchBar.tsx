@@ -33,14 +33,18 @@ export function FilterSearchBar({
   const filterRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   const handleFilterKeyDown = (e: KeyboardEvent, index: number) => {
+    // Garante segurança caso FILTER_OPTIONS venha zerado por erro de importação
+    const optionsLength = FILTER_OPTIONS?.length || 0;
+    if (optionsLength === 0) return;
+
     if (e.key === 'ArrowRight') {
       e.preventDefault();
-      const next = (index + 1) % FILTER_OPTIONS.length;
+      const next = (index + 1) % optionsLength;
       filterRefs.current[next]?.focus();
     }
     if (e.key === 'ArrowLeft') {
       e.preventDefault();
-      const prev = (index - 1 + FILTER_OPTIONS.length) % FILTER_OPTIONS.length;
+      const prev = (index - 1 + optionsLength) % optionsLength;
       filterRefs.current[prev]?.focus();
     }
     if (e.key === 'Home') {
@@ -49,7 +53,7 @@ export function FilterSearchBar({
     }
     if (e.key === 'End') {
       e.preventDefault();
-      filterRefs.current[FILTER_OPTIONS.length - 1]?.focus();
+      filterRefs.current[optionsLength - 1]?.focus();
     }
   };
 
@@ -98,16 +102,9 @@ export function FilterSearchBar({
       {/* Filters + Sort row */}
       <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         {/* Category filter buttons */}
-        <nav
-          role="navigation"
-          aria-label="Filtrar avisos por categoria"
-        >
-          <div
-            role="radiogroup"
-            aria-label="Categorias de avisos"
-            className="flex flex-wrap gap-2"
-          >
-            {FILTER_OPTIONS.map((opt, i) => {
+        <nav role="navigation" aria-label="Filtrar avisos por categoria">
+          <div role="radiogroup" aria-label="Categorias de avisos" className="flex flex-wrap gap-2">
+            {FILTER_OPTIONS?.map((opt, i) => {
               const isActive = filter === opt.value;
               return (
                 <button
@@ -144,8 +141,7 @@ export function FilterSearchBar({
         {/* Sort control */}
         <div className="relative">
           <label htmlFor="sort-select" className="sr-only">Ordenar avisos</label>
-          <div className="relative flex items-center gap-2 rounded-xl border border-border bg-secondary px-4"
-            style={{ minHeight: '48px' }}>
+          <div className="relative flex items-center gap-2 rounded-xl border border-border bg-secondary px-4" style={{ minHeight: '48px' }}>
             <SortAsc size={16} aria-hidden="true" className="shrink-0 text-muted-foreground" />
             <select
               id="sort-select"
@@ -165,14 +161,8 @@ export function FilterSearchBar({
         </div>
       </div>
 
-      {/* Results summary */}
-      <div
-        role="status"
-        aria-live="polite"
-        aria-atomic="true"
-        className="mt-3 text-muted-foreground"
-        style={{ fontSize: '0.85rem' }}
-      >
+      {/* Results summary (Proteção contra undefined aplicada aqui) */}
+      <div role="status" aria-live="polite" aria-atomic="true" className="mt-3 text-muted-foreground" style={{ fontSize: '0.85rem' }}>
         {search ? (
           <span>
             {resultCount === 0
@@ -182,7 +172,7 @@ export function FilterSearchBar({
         ) : (
           <span>
             {resultCount} aviso{resultCount !== 1 ? 's' : ''} exibido{resultCount !== 1 ? 's' : ''}
-            {filter !== 'todos' ? ` na categoria "${FILTER_OPTIONS.find(f => f.value === filter)?.label}"` : ''}
+            {filter !== 'todos' ? ` na categoria "${FILTER_OPTIONS?.find(f => f.value === filter)?.label || 'Selecionada'}"` : ''}
           </span>
         )}
       </div>
