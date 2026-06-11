@@ -1,11 +1,11 @@
 import { defineConfig } from 'vite';
-import react from '@vitejs/react-vite-plugin'; // ou o plugin que estiver usando, ex: @vitejs/plugin-react
+import react from '@vitejs/plugin-react'; // <--- Nome correto do pacote oficial!
 import path from 'path';
 
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react()],
-  base: '/Appbarreiravisual/', // <--- ADICIONE ESTA LINHA COM O NOME DO SEU REPOSITÓRIO
+  base: '/Appbarreiravisual/', // Mantém isso para consertar o CSS no GitHub Pages
   resolve: {
     alias: {
       '@': path.resolve(__dirname, './src'),
