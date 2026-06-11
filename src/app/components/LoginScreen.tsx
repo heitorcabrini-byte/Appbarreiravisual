@@ -34,7 +34,6 @@ function LoginForm({ highContrastMode, onSuccess }: LoginFormProps) {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<LoginError | null>(null);
   const [loading, setLoading] = useState(false);
-  const [attempts, setAttempts] = useState(0);
 
   const emailRef = useRef<HTMLInputElement>(null);
   const errorRef = useRef<HTMLDivElement>(null);
@@ -51,7 +50,6 @@ function LoginForm({ highContrastMode, onSuccess }: LoginFormProps) {
     setLoading(false);
     if ('error' in result) {
       setError(result.error);
-      setAttempts(a => a + 1);
       return;
     }
     saveSession(result.session);
@@ -104,12 +102,6 @@ function LoginForm({ highContrastMode, onSuccess }: LoginFormProps) {
         </div>
       </div>
 
-      {attempts >= 3 && (
-        <p role="status" className="mb-4 rounded-lg border border-amber-500 bg-black p-3 text-amber-300 text-xs font-bold">
-          Muitas tentativas. Ligue para a secretaria: (11) 3344-5566
-        </p>
-      )}
-
       <button type="submit" disabled={loading} className={cn('flex w-full items-center justify-center gap-3 rounded-xl px-6 py-4 font-bold transition-all', highContrastMode === 'high-contrast' ? 'bg-yellow-400 text-black hover:bg-yellow-300' : highContrastMode === 'inverted' ? 'bg-white text-black hover:bg-neutral-200' : 'bg-primary text-primary-foreground hover:bg-primary/90')} style={{ minHeight: '56px' }}>
         {loading ? <span>Entrando...</span> : <span className="flex items-center gap-2"><LogIn size={18}/> Entrar</span>}
       </button>
@@ -141,9 +133,9 @@ export function LoginScreen({
       <div className="flex flex-wrap items-center justify-between border-b p-4 gap-3 bg-secondary/20 border-border">
         <div className="flex flex-wrap items-center gap-3">
           <div role="group" aria-label="Tamanho da fonte" className="flex items-center rounded-lg border border-border overflow-hidden bg-background">
-            <button type="button" onClick={onFontDecrease} className="px-3 py-1.5 hover:bg-secondary font-bold">A−</button>
+            <button type="button" onClick={onFontDecrease} className="px-3 py-1.5 hover:bg-secondary text-foreground font-bold">A−</button>
             <span className="px-2 text-xs border-x border-border font-mono text-foreground">{fontSize}px</span>
-            <button type="button" onClick={onFontIncrease} className="px-3 py-1.5 hover:bg-secondary font-bold">A+</button>
+            <button type="button" onClick={onFontIncrease} className="px-3 py-1.5 hover:bg-secondary text-foreground font-bold">A+</button>
           </div>
 
           <button type="button" onClick={onCycleContrast} className={cn("flex items-center gap-2 rounded-lg border px-3 py-1.5 text-xs font-semibold transition-all", contrastMode === 'high-contrast' ? 'bg-yellow-400 text-black border-yellow-400' : contrastMode === 'inverted' ? 'bg-white text-black border-white' : 'bg-background hover:bg-secondary border-border text-foreground')}>
@@ -175,9 +167,9 @@ export function LoginScreen({
               <div className="space-y-3 text-sm leading-relaxed">
                 <p>Use os comandos de teclado abaixo para navegar:</p>
                 <ul className="space-y-2 pt-1">
-                  <li><kbd className="bg-muted px-1.5 py-0.5 rounded border text-xs font-bold">Tab</kbd> Avança para o próximo botão ou campo.</li>
-                  <li><kbd className="bg-muted px-1.5 py-0.5 rounded border text-xs font-bold">Shift + Tab</kbd> Volta para o botão ou campo anterior.</li>
-                  <li><kbd className="bg-muted px-1.5 py-0.5 rounded border text-xs font-bold">Enter</kbd> Confirma ações ou abre os cards do mural.</li>
+                  <li><kbd className="bg-muted px-1.5 py-0.5 rounded border text-xs font-bold text-foreground">Tab</kbd> Avança para o próximo botão ou campo.</li>
+                  <li><kbd className="bg-muted px-1.5 py-0.5 rounded border text-xs font-bold text-foreground">Shift + Tab</kbd> Volta para o botão ou campo anterior.</li>
+                  <li><kbd className="bg-muted px-1.5 py-0.5 rounded border text-xs font-bold text-foreground">Enter</kbd> Confirma ações ou abre os cards do mural.</li>
                 </ul>
               </div>
               <button type="button" onClick={() => setShowKeyboardHelp(false)} className="mt-6 w-full rounded-xl bg-secondary py-2.5 font-bold hover:bg-secondary/80 text-foreground">Entendi, Fechar</button>
