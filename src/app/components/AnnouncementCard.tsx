@@ -6,48 +6,57 @@ interface AnnouncementCardProps {
     id: string;
     title: string;
     content: string;
-    category: string;
+    category?: string; // Tornando opcional para prevenção de erros
     date: string;
     author?: string;
     tags?: string[];
-    emoji?: string;
   };
 }
 
 export function AnnouncementCard({ announcement }: AnnouncementCardProps) {
-  const { title, content, category, date, author = "Secretaria Escolar", tags = [] } = announcement;
-  
-  // Estados Locais de Interação
+  // Fallback seguro caso algum dado venha corrompido do banco/mock
+  const category = announcement?.category || 'geral';
+  const title = announcement?.title || 'Aviso sem título';
+  const content = announcement?.content || '';
+  const date = announcement?.date || '--/--/----';
+  const author = announcement?.author || 'Secretaria Escolar';
+  const tags = announcement?.tags || [];
+
   const [isFavorited, setIsFavorited] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
 
-  // 🔊 Função Real de Acessibilidade: Text-to-Speech nativo
-  const handleSpeak = () => {
-    if ('speechSynthesis' in window) {
-      if (isSpeaking) {
-        window.speechSynthesis.cancel();
-        setIsSpeaking(false);
-        return;
-      }
-
-      // Cancela qualquer outra voz rodando antes de começar
-      window.speechSynthesis.cancel();
-
-      const textToRead = `Aviso ${category}. Título: ${title}. Conteúdo: ${content}. Publicado por ${author} em ${date}.`;
-      const utterance = new SpeechSynthesisUtterance(textToRead);
-      utterance.lang = 'pt-BR';
-      
-      utterance.onend = () => setIsSpeaking(false);
-      utterance.onerror = () => setIsSpeaking(false);
-
-      setIsSpeaking(true);
-      window.speechSynthesis.speak(utterance);
-    } else {
-      alert('Seu navegador não suporta a leitura de texto em áudio.');
+  // 🔊 Síntese de voz nativa reparada e protegida contra travamentos
+  const handleSpeak = (e: React.MouseEvent) => {
+    e.stopPropagation();
+    
+    if (!('speechSynthesis' in window)) {
+      alert('Seu navegador não suporta a leitura de áudio nativa.');
+      return;
     }
+
+    if (isSpeaking) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+      return;
+    }
+
+    window.speechSynthesis.cancel(); // Reseta leituras presas
+
+    const textToRead = `Aviso ${category}. Título: ${title}. Conteúdo: ${content}.`;
+    const utterance = new SpeechSynthesisUtterance(textToRead);
+    utterance.lang = 'pt-BR';
+    
+    // Configurações para clareza em acessibilidade
+    utterance.rate = 1.0; 
+    utterance.pitch = 1.0;
+
+    utterance.onend = () => setIsSpeaking(false);
+    utterance.onerror = () => setIsSpeaking(false);
+
+    setIsSpeaking(true);
+    window.speechSynthesis.speak(utterance);
   };
 
-  // Mapeamento preciso de cores e estilos baseado no Figma
   const themeStyles: Record<string, { bg: string; border: string; badge: string; dot: string }> = {
     urgente: {
       bg: 'bg-[#1e1215]',
@@ -130,8 +139,7 @@ export function AnnouncementCard({ announcement }: AnnouncementCardProps) {
           <button 
             type="button"
             onClick={handleSpeak}
-            className={`flex items-center gap-1 transition-colors cursor-pointer font-medium ${isSpeaking ? 'text-green-400 font-bold' : 'hover:text-white'}`}
-            aria-label={isSpeaking ? "Parar leitura de áudio" : "Ouvir comunicado em áudio"}
+            className={`flex items-center gap-1 transition-colors cursor-pointer font-medium ${isSpeaking ? 'text-yellow-400 font-bold' : 'hover:text-white'}`}
           >
             {isSpeaking ? <VolumeX size={14} /> : <Volume2 size={14} />}
             <span>{isSpeaking ? 'Parar' : 'Ouvir'}</span>
@@ -141,16 +149,15 @@ export function AnnouncementCard({ announcement }: AnnouncementCardProps) {
             type="button"
             onClick={() => setIsFavorited(!isFavorited)}
             className={`flex items-center gap-1 transition-colors cursor-pointer font-medium ${isFavorited ? 'text-yellow-400 font-bold' : 'hover:text-white'}`}
-            aria-label={isFavorited ? "Remover dos favoritos" : "Salvar nos favoritos"}
           >
-            <Star size={14} fill={isFavorited ? "currentColor" : "none"} />
+            <Star size={14} fill={isFavorited ? "#facc15" : "none"} stroke={isFavorited ? "#facc15" : "currentColor"} />
             <span>{isFavorited ? 'Salvo' : 'Salvar'}</span>
           </button>
         </div>
 
         <button 
           type="button"
-          className="flex items-center gap-0.5 font-bold text-blue-400 hover:text-blue-300 transition-colors cursor-pointer"
+          className="flex items-center gap-0.5 font-bold text-blue-400 accessibility-action-btn transition-colors cursor-pointer"
         >
           <span>Ver aviso</span>
           <ChevronRight size={14} />
