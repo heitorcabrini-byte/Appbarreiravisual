@@ -307,7 +307,7 @@ export function LoginScreen({
               aria-label={`Diminuir fonte. Atual: ${fontSize}px`}
               className="flex h-9 w-9 items-center justify-center hover:bg-secondary disabled:opacity-40 focus-visible:ring-2 focus-visible:ring-ring"
               style={{ fontSize: '0.7rem', fontWeight: 700 }}>A−</button>
-            <span aria-live="polite" className="hidden border-x border-border px-2 text-muted-foreground sm:block" style={{ fontSize: '0.75rem' }}>
+            <span aria-live="polite" className="block border-x border-border px-2 text-muted-foreground" style={{ fontSize: '0.75rem' }}>
               {fontSize}px
             </span>
             <button type="button" onClick={onFontIncrease} disabled={fontSize >= maxFont}
