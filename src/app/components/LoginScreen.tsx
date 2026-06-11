@@ -3,13 +3,7 @@ import { Eye, EyeOff, Mail, Lock, AlertCircle, LogIn, Keyboard, X } from 'lucide
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from './ui/utils';
 import { RegisterForm } from './RegisterForm';
-import {
-  attemptLogin,
-  saveSession,
-  LOGIN_ERROR_MESSAGES,
-  type Session,
-  type LoginError,
-} from '../../data/users'; // <--- CAMINHO REAL DO SEU PROJETO!
+import { useAuth } from '../../context/auth';
 type ContrastMode = 'normal' | 'high-contrast' | 'inverted';
 
 interface LoginScreenProps {
