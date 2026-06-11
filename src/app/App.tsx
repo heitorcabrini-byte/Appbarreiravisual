@@ -3,10 +3,44 @@ import LoginScreen from './components/LoginScreen';
 import { Header } from './components/Header';
 import { FilterSearchBar } from './components/FilterSearchBar';
 import { AnnouncementCard } from './components/AnnouncementCard';
-// Trazendo os dados reais do Figma de volta
-import { ANNOUNCEMENTS, FILTER_OPTIONS } from './data/announcements'; 
 
 type ContrastMode = 'normal' | 'high-contrast' | 'inverted';
+
+// 📋 DADOS REAIS DO FIGMA INJETADOS DIRETO AQUI (Evita erros de importação no build)
+const ANNOUNCEMENTS_DATA = [
+  {
+    id: '1',
+    title: 'Período de Rematrícula Escolar 2026',
+    content: 'Atenção responsáveis! O prazo para renovação de matrícula para o segundo semestre já está aberto. Os documentos necessários devem ser entregues diretamente na secretaria ou enviados pelo portal do aluno até o dia 30/06.',
+    category: 'Urgente',
+    date: '11/06/2026',
+    emoji: '🚨'
+  },
+  {
+    id: '2',
+    title: 'Reunião de Pais e Mestres do 2º Bimestre',
+    content: 'Convidamos todos os pais e responsáveis para a nossa reunião bimestral que acontecerá neste sábado, das 09h às 12h. Será uma excelente oportunidade para discutir o desempenho acadêmico e a entrega de boletins.',
+    category: 'Importante',
+    date: '10/06/2026',
+    emoji: '📅'
+  },
+  {
+    id: '3',
+    title: 'Feira de Ciências Interdisciplinar',
+    content: 'Estão abertas as inscrições para os projetos da Feira de Ciências deste ano! O tema central será "Sustentabilidade e Tecnologia no Cotidiano". Procure seu professor de biologia ou física para registrar seu grupo.',
+    category: 'Informativo',
+    date: '08/06/2026',
+    emoji: '📢'
+  },
+  {
+    id: '4',
+    title: 'Manutenção do Bloco B e Laboratórios',
+    content: 'Informamos que o Bloco B passará por manutenções preventivas na rede elétrica durante o próximo final de semana. O acesso aos laboratórios de informática estará suspenso temporariamente.',
+    category: 'Geral',
+    date: '05/06/2026',
+    emoji: 'ℹ️'
+  }
+];
 
 export default function App() {
   // Controle de Sessão e Telas
@@ -26,7 +60,7 @@ export default function App() {
   const minFont = 14;
   const maxFont = 26;
 
-  // ⌨️ Escuta Global de Atalhos de Teclado (Funciona em todo o site)
+  // ⌨️ Escuta Global de Atalhos de Teclado (Acessibilidade funcionando em todo o site)
   useEffect(() => {
     const handleGlobalKeyDown = (e: KeyboardEvent) => {
       // Alt + 1: Aumentar Fonte
@@ -55,7 +89,7 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleGlobalKeyDown);
   }, [contrastMode]);
 
-  // Sincroniza classes CSS de Contraste no elemento raiz
+  // Sincroniza classes CSS de Contraste no elemento raiz (HTML)
   useEffect(() => {
     const root = document.documentElement;
     root.classList.remove('high-contrast', 'inverted-contrast');
@@ -74,8 +108,8 @@ export default function App() {
     });
   };
 
-  // 🔍 FILTRAGEM E ORDENAÇÃO DOS DADOS REAIS DO FIGMA
-  const filteredAnnouncements = (ANNOUNCEMENTS || []).filter(item => {
+  // 🔍 SISTEMA DE FILTRAGEM DINÂMICA
+  const filteredAnnouncements = ANNOUNCEMENTS_DATA.filter(item => {
     const matchesFilter = filter === 'todos' || item.category.toLowerCase() === filter.toLowerCase();
     const matchesSearch = 
       item.title.toLowerCase().includes(search.toLowerCase()) ||
@@ -87,10 +121,9 @@ export default function App() {
   // Ordenação
   const sortedAnnouncements = [...filteredAnnouncements].sort((a, b) => {
     if (sort === 'antigo') {
-      return new Date(a.date).getTime() - new Date(b.date).getTime();
+      return new Date(a.date.split('/').reverse().join('-')).getTime() - new Date(b.date.split('/').reverse().join('-')).getTime();
     }
-    // Padrão: Mais recente primeiro
-    return new Date(b.date).getTime() - new Date(a.date).getTime();
+    return new Date(b.date.split('/').reverse().join('-')).getTime() - new Date(a.date.split('/').reverse().join('-')).getTime();
   });
 
   return (
@@ -110,7 +143,7 @@ export default function App() {
         />
       ) : (
         <div className="min-h-screen bg-[#0b121f] text-white transition-colors">
-          {/* Header conectado com as funções reais de modificação */}
+          {/* Header agora totalmente conectado com os controles reais */}
           <Header 
             fontSize={fontSize}
             contrastMode={contrastMode}
@@ -129,7 +162,7 @@ export default function App() {
               <p className="text-sm text-slate-400 mt-1">Acompanhe comunicados, eventos e informações importantes da escola.</p>
             </div>
 
-            {/* Filtros dinâmicos informando a quantidade correta baseada na busca */}
+            {/* Barra de pesquisa atualizando em tempo real */}
             <FilterSearchBar 
               filter={filter}
               search={search}
@@ -141,7 +174,7 @@ export default function App() {
               highContrast={contrastMode === 'high-contrast'}
             />
 
-            {/* Grid Renderizando os Dados Reais do Banco/Figma */}
+            {/* Grid Renderizando os Mocks Dinâmicos */}
             {sortedAnnouncements.length === 0 ? (
               <div className="text-center py-12 text-slate-500 text-sm">
                 Nenhum aviso encontrado para os filtros selecionados.
