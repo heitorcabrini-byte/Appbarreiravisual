@@ -1,9 +1,8 @@
 import { useState, useEffect } from 'react';
-import { LoginScreen } from './app/components/LoginScreen';
-import { Header } from './app/components/Header';
-import { FilterSearchBar } from './app/components/FilterSearchBar';
-import { AnnouncementCard } from './app/components/AnnouncementCard';
-// Mantenha os seus outros imports de dados se existirem (ex: seus cards)
+import { LoginScreen } from './components/LoginScreen';
+import { Header } from './components/Header';
+import { FilterSearchBar } from './components/FilterSearchBar';
+import { AnnouncementCard } from './components/AnnouncementCard';
 
 type ContrastMode = 'normal' | 'high-contrast' | 'inverted';
 
@@ -66,15 +65,14 @@ export default function App() {
             <div className="mb-6">
               <span className="text-xs font-bold uppercase tracking-wider text-muted-foreground">Escola Estadual Dom Pedro II</span>
               <h1 className="text-3xl font-extrabold mt-1 text-foreground">Mural de Avisos</h1>
-              <p className="text-sm text-muted-foreground mt-1">Acompanhe comunicados, eventos e informações importantes da escola.</p>
+              <p className="text-sm text-muted-foreground mt-1">Acompanhe comunicados, events e informações importantes da escola.</p>
             </div>
 
             {/* Barra de pesquisa original */}
             <FilterSearchBar />
 
-            {/* Seus Cards de Aviso entram organizados em Grid responsiva (evitando o erro vertical) */}
+            {/* Seus Cards de Aviso entram organizados em Grid responsiva */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
-              {/* O seu mapeamento interno de avisos ou os componentes estáticos entram aqui */}
               <AnnouncementCard />
             </div>
           </main>
