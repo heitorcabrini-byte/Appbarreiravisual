@@ -1,95 +1,28 @@
-/* Importações originais estruturadas do Figmake */
+@import "tailwindcss";
+
 @import './fonts.css';
 @import './theme.css';
 @import './tailwind.css';
 
-/* Mapeamento manual das cores e tokens acessíveis do seu Figma */
-:root {
-  --font-size: 16px;
-  --background: #0b0f19 !important; /* Força o azul-escuro de acessibilidade por padrão */
-  --foreground: #f8fafc !important;
-  --card: #0b0f19 !important;
-  --card-foreground: #f8fafc !important;
-  --popover: #0b0f19 !important;
-  --popover-foreground: #f8fafc !important;
-  --primary: #1d4ed8 !important; /* O azul vibrante dos botões do Figma */
-  --primary-foreground: #ffffff !important;
-  --secondary: #1e293b !important;
-  --secondary-foreground: #f8fafc !important;
-  --muted: #1e293b !important;
-  --muted-foreground: #94a3b8 !important;
-  --accent: #1e293b !important;
-  --accent-foreground: #ffffff !important;
-  --destructive: #ef4444 !important;
-  --destructive-foreground: #ffffff !important;
-  --border: #334155 !important;
-  --input: #1e293b !important;
-  --radius: 0.625rem;
-}
-
-/* Aplicação global dos estilos de alto contraste e layout */
+/* Força a centralização absoluta do container na tela inteira */
 html, body, #root {
+  display: flex !important;
+  flex-direction: column !important;
+  justify-content: center !important;
+  align-items: center !important;
+  min-height: 100vh !important;
+  width: 100% !important;
   background-color: #0b0f19 !important;
-  color: #f8fafc !important;
-  font-family: system-ui, -apple-system, sans-serif;
-  height: 100%;
-  margin: 0;
-}
-
-/* Estilização rápida para tirar o visual crú dos botões enquanto o switch carrega */
-button, input, select {
-  background-color: var(--input) !important;
-  color: var(--foreground) !important;
-  border: 1px solid var(--border) !important;
-  border-radius: var(--radius) !important;
-  padding: 6px 12px;
-}
-
-button[type="submit"], .bg-primary {
-  background-color: var(--primary) !important;
   color: #ffffff !important;
-}
-#root {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  min-height: 100vh;
-  width: 100%;
-}
-
-/* Centraliza a caixinha do aplicativo na tela como no Figma */
-#root, body {
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: center !important;
-  align-items: center !important;
-  min-height: 100vh !important;
-  width: 100% !important;
+  margin: 0 !important;
+  padding: 0 !important;
   box-sizing: border-box;
 }
 
-/* Garante que o container central tenha o espaçamento correto */
-main, .container {
-  width: 100%;
-  max-width: 440px; /* Largura padrão de uma tela de login moderna */
-  margin: 0 auto;
-}
-
-/* Centraliza a estrutura da página inteira na tela */
-#root, body {
-  display: flex !important;
-  flex-direction: column !important;
-  justify-content: center !important;
-  align-items: center !important;
-  min-height: 100vh !important;
+/* Envelopa o conteúdo de login ou do mural em um bloco centralizado elegante */
+main, .container, form, login-screen {
   width: 100% !important;
-  box-sizing: border-box;
-}
-
-/* Define o tamanho limite do bloco centralizado do Figma */
-main, .container {
-  width: 100%;
-  max-width: 440px; /* Largura perfeita para caixas de login modernas */
-  margin: 0 auto;
+  max-width: 480px !important;
+  margin: 0 auto !important;
+  padding: 16px;
 }
