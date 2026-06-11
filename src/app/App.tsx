@@ -1,13 +1,14 @@
 import { useState, useEffect } from 'react';
-import LoginScreen from './components/LoginScreen'; // Caminho relativo correto dentro de src/app/
+import LoginScreen from './components/LoginScreen'; 
 import { Header } from './components/Header';
 import { FilterSearchBar } from './components/FilterSearchBar';
 import { AnnouncementCard } from './components/AnnouncementCard';
+import { FilterOption, SortOption } from './data/announcements'; // Ajuste o caminho se necessário
 
 type ContrastMode = 'normal' | 'high-contrast' | 'inverted';
 
 export default function App() {
-  // Controle de Sessão e de Telas (login ou registro)
+  // Controle de Sessão e de Telas
   const [session, setSession] = useState<any>(null);
   const [currentScreen, setCurrentScreen] = useState<'login' | 'register'>('login');
   
@@ -16,10 +17,14 @@ export default function App() {
   const [contrastMode, setContrastMode] = useState<ContrastMode>('normal');
   const [showKeyboardHelp, setShowKeyboardHelp] = useState(false);
 
+  // Estados do Mural (Necessários para os filtros funcionarem sem quebrar)
+  const [filter, setFilter] = useState<FilterOption>('todos');
+  const [search, setSearch] = useState('');
+  const [sort, setSort] = useState<SortOption>('recente');
+
   const minFont = 14;
   const maxFont = 26;
 
-  // Injeta dinamicamente as classes de alto contraste na raiz HTML do site
   useEffect(() => {
     const root = document.documentElement;
     root.classList.remove('high-contrast', 'inverted-contrast');
@@ -41,7 +46,6 @@ export default function App() {
   return (
     <div style={{ fontSize: `${fontSize}px` }} className="min-h-screen transition-colors bg-[#0b121f] text-white">
       {!session ? (
-        // Se NÃO estiver logado, gerencia a exibição entre Login e Cadastro
         <LoginScreen
           fontSize={fontSize}
           contrastMode={contrastMode}
@@ -55,9 +59,7 @@ export default function App() {
           setCurrentScreen={setCurrentScreen}
         />
       ) : (
-        // SE ESTIVER LOGADO: Renderiza o Mural Perfeito com os componentes reais
         <div className="min-h-screen bg-[#0b121f] text-white transition-colors">
-          
           <Header 
             fontSize={fontSize}
             contrastMode={contrastMode}
@@ -73,13 +75,22 @@ export default function App() {
             <div className="mb-6 mt-4">
               <span className="text-xs font-bold uppercase tracking-wider text-blue-400">Escola Estadual Dom Pedro II</span>
               <h1 className="text-3xl font-extrabold mt-1 text-white">Mural de Avisos</h1>
-              <p className="text-sm text-slate-400 mt-1">Acompanhe comunicados, eventos e informações importantes da escola.</p>
+              <p className="text-sm text-slate-400 mt-1">Acompanhe comunicados, events e informações importantes da escola.</p>
             </div>
 
-            {/* Barra de filtros original */}
-            <FilterSearchBar />
+            {/* Chamada corrigida com todas as props necessárias passadas */}
+            <FilterSearchBar 
+              filter={filter}
+              search={search}
+              sort={sort}
+              resultCount={1} // Provisório para renderizar o card de teste
+              onFilterChange={setFilter}
+              onSearchChange={setSearch}
+              onSortChange={setSort}
+              highContrast={contrastMode === 'high-contrast'}
+            />
 
-            {/* Grid dos Cards formatado */}
+            {/* Grid de Anúncios */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8">
               <AnnouncementCard />
             </div>
