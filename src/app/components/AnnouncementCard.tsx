@@ -1,134 +1,120 @@
 import { useState } from 'react';
-import { Volume2, VolumeX, Star, ChevronRight, Calendar, User } from 'lucide-react';
+
+// Tipagem baseada nos dados isolados do Figma
+interface Announcement {
+  id: string;
+  title: string;
+  content: string;
+  category: string;
+  date: string;
+  author?: string;
+  tags?: string[];
+  emoji?: string;
+}
 
 interface AnnouncementCardProps {
-  announcement: {
-    id: string;
-    title: string;
-    content: string;
-    category?: string;
-    date: string;
-    author?: string;
-    tags?: string[];
-  };
+  announcement: Announcement;
 }
 
 export function AnnouncementCard({ announcement }: AnnouncementCardProps) {
-  const category = announcement?.category || 'geral';
-  const title = announcement?.title || 'Aviso';
-  const content = announcement?.content || '';
-  const date = announcement?.date || '';
-  const author = announcement?.author || 'Secretaria';
-  const tags = announcement?.tags || [];
+  // 🔄 Estado que controla se o aviso está expandido ou minimizado
+  const [isExpanded, setIsExpanded] = useState(false);
 
-  const [isFavorited, setIsFavorited] = useState(false);
-  const [isSpeaking, setIsSpeaking] = useState(false);
-
-  // 🔊 Função de Áudio Corrigida
-  const handleSpeak = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation();
-
-    if (!('speechSynthesis' in window)) {
-      alert('A síntese de voz não é suportada neste navegador.');
-      return;
+  // Mapeamento de cores de bordas/badges baseado na categoria
+  const getCategoryStyles = (category: string) => {
+    switch (category.toLowerCase()) {
+      case 'urgente':
+        return { border: 'border-red-500/30', bg: 'bg-red-500/10', text: 'text-red-400' };
+      case 'importante':
+        return { border: 'border-amber-500/30', bg: 'bg-amber-500/10', text: 'text-amber-400' };
+      case 'informativo':
+        return { border: 'border-green-500/30', bg: 'bg-green-500/10', text: 'text-green-400' };
+      default:
+        return { border: 'border-blue-500/30', bg: 'bg-blue-500/10', text: 'text-blue-400' };
     }
-
-    if (isSpeaking) {
-      window.speechSynthesis.cancel();
-      setIsSpeaking(false);
-      return;
-    }
-
-    window.speechSynthesis.cancel();
-
-    const textToRead = `${title}. ${content}`;
-    const utterance = new SpeechSynthesisUtterance(textToRead);
-    utterance.lang = 'pt-BR';
-    utterance.rate = 1.0;
-
-    utterance.onend = () => setIsSpeaking(false);
-    utterance.onerror = () => setIsSpeaking(false);
-
-    setIsSpeaking(true);
-    window.speechSynthesis.speak(utterance);
   };
 
-  const themeStyles: Record<string, { bg: string; border: string; badge: string; dot: string }> = {
-    urgente: { bg: 'bg-[#1e1215]', border: 'border-red-900/40', badge: 'bg-red-500/10 text-red-400 border-red-500/20', dot: 'bg-red-500' },
-    importante: { bg: 'bg-[#1c1712]', border: 'border-amber-900/40', badge: 'bg-amber-500/10 text-amber-400 border-amber-500/20', dot: 'bg-amber-500' },
-    informativo: { bg: 'bg-[#111916]', border: 'border-emerald-900/40', badge: 'bg-emerald-500/10 text-emerald-400 border-emerald-500/20', dot: 'bg-emerald-500' },
-    geral: { bg: 'bg-[#121622]', border: 'border-blue-900/40', badge: 'bg-blue-500/10 text-blue-400 border-blue-500/20', dot: 'bg-blue-500' },
-  };
-
-  const currentTheme = themeStyles[category.toLowerCase()] || themeStyles['geral'];
+  const styles = getCategoryStyles(announcement.category);
 
   return (
-    <article className={`flex flex-col justify-between rounded-2xl border p-5 transition-all duration-200 shadow-xl accessibility-card ${currentTheme.bg} ${currentTheme.border}`}>
+    <div 
+      className={`w-full rounded-2xl border bg-[#0d1527] p-5 transition-all duration-300 flex flex-col justify-between ${styles.border} ${
+        isExpanded ? 'ring-2 ring-blue-500/50 shadow-lg shadow-blue-950/40 md:col-span-2 lg:col-span-3' : 'hover:border-slate-700'
+      }`}
+    >
       <div>
-        <div className="flex items-center justify-between gap-2 mb-4">
-          <span className={`inline-flex items-center gap-1 rounded-md border px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider accessibility-badge ${currentTheme.badge}`}>
-            {category}
+        {/* Cabeçalho do Card: Categoria e Data */}
+        <div className="flex items-center justify-between mb-3 text-xs">
+          <span className={`px-2.5 py-1 rounded-md font-bold uppercase tracking-wider ${styles.bg} ${styles.text}`}>
+            {announcement.emoji} {announcement.category}
           </span>
-          <div className={`h-2 w-2 rounded-full accessibility-dot ${currentTheme.dot}`} />
+          <span className="text-slate-400 font-medium">
+            {announcement.date}
+          </span>
         </div>
-        
-        <h3 className="text-base font-bold text-white tracking-tight leading-snug mb-2 accessibility-title">
-          {title}
-        </h3>
-        
-        <p className="text-xs text-slate-300 leading-relaxed mb-4 line-clamp-3 accessibility-text">
-          {content}
+
+        {/* Título do Aviso */}
+        <h2 className="text-lg font-bold text-white tracking-tight leading-snug">
+          {announcement.title}
+        </h2>
+
+        {/* 👁️ Conteúdo do Card - RESOLVIDO: Cores com alto contraste em relação ao fundo escuro */}
+        <p className={`mt-3 text-sm text-slate-200 leading-relaxed font-normal ${
+          isExpanded ? '' : 'line-clamp-3'
+        }`}>
+          {announcement.content}
         </p>
 
-        <div className="flex flex-col gap-1.5 text-[11px] text-slate-400 mb-4 accessibility-meta">
-          <div className="flex items-center gap-1.5">
-            <Calendar size={12} />
-            <span>{date}</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <User size={12} />
-            <span>{author}</span>
-          </div>
-        </div>
-
-        {tags.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 mb-5">
-            {tags.map((tag) => (
-              <span key={tag} className="text-[10px] text-slate-400 bg-slate-900/60 border border-slate-800/80 px-2 py-0.5 rounded-md accessibility-tag">
-                #{tag}
-              </span>
-            ))}
+        {/* Seções adicionais exibidas APENAS quando expandido */}
+        {isExpanded && (
+          <div className="mt-5 pt-4 border-t border-slate-800/60 animate-fadeIn">
+            {announcement.author && (
+              <p className="text-xs text-slate-400 font-medium flex items-center gap-1.5 mb-3">
+                <span>👤 Autor(a):</span>
+                <span className="text-slate-300 font-semibold">{announcement.author}</span>
+              </p>
+            )}
+            
+            {announcement.tags && announcement.tags.length > 0 && (
+              <div className="flex flex-wrap gap-1.5 mt-2">
+                {announcement.tags.map((tag, idx) => (
+                  <span 
+                    key={idx} 
+                    className="text-[11px] font-medium bg-slate-900 text-slate-400 px-2 py-0.5 rounded-md border border-slate-800/40"
+                  >
+                    #{tag}
+                  </span>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>
 
-      <div className="pt-3 border-t border-slate-800/60 flex items-center justify-between text-xs text-slate-400 accessibility-footer">
-        <div className="flex items-center gap-4">
-          <button 
-            type="button" 
-            onClick={handleSpeak}
-            className={`flex items-center gap-1 cursor-pointer transition-colors ${isSpeaking ? 'text-yellow-400 font-bold' : 'hover:text-white'}`}
-          >
-            {isSpeaking ? <VolumeX size={14} /> : <Volume2 size={14} />}
-            <span>{isSpeaking ? 'Parar' : 'Ouvir'}</span>
+      {/* Rodapé do Card com Ações de Controle */}
+      <div className="mt-5 pt-3 border-t border-slate-800/40 flex items-center justify-between">
+        <div className="flex gap-4 text-xs text-slate-400 font-medium">
+          <button className="hover:text-white transition-colors flex items-center gap-1">
+            🔊 Ouvir
           </button>
-          
-          <button 
-            type="button" 
-            onClick={(e) => { e.stopPropagation(); setIsFavorited(!isFavorited); }}
-            className={`flex items-center gap-1 cursor-pointer transition-colors ${isFavorited ? 'text-yellow-400 font-bold' : 'hover:text-white'}`}
-          >
-            <Star size={14} fill={isFavorited ? "#facc15" : "none"} stroke={isFavorited ? "#facc15" : "currentColor"} />
-            <span>{isFavorited ? 'Salvo' : 'Salvar'}</span>
+          <button className="hover:text-white transition-colors flex items-center gap-1">
+            ⭐ Salvar
           </button>
         </div>
 
-        <button type="button" className="flex items-center gap-0.5 font-bold text-blue-400 accessibility-btn">
-          <span>Ver aviso</span>
-          <ChevronRight size={14} />
+        {/* 🚀 Botão Interativo de Expansão / Retração */}
+        <button
+          onClick={() => setIsExpanded(!isExpanded)}
+          className="text-sm font-bold text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-1 focus:outline-none focus:underline"
+          aria-expanded={isExpanded}
+        >
+          {isExpanded ? (
+            <>Voltar ao normal ↩️</>
+          ) : (
+            <>Ver aviso <span className="inline-block transition-transform duration-200 group-hover:translate-x-0.5">❯</span></>
+          )}
         </button>
       </div>
-    </article>
+    </div>
   );
 }
