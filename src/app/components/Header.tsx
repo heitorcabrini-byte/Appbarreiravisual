@@ -1,4 +1,5 @@
-import { Eye, LogOut, User, Keyboard } from 'lucide-react';
+import { Sun, Moon, Eye, ZoomIn, ZoomOut, Keyboard, LogOut } from 'lucide-react';
+import { cn } from './ui/utils';
 
 interface HeaderProps {
   fontSize: number;
@@ -19,81 +20,100 @@ export function Header({
   onCycleContrast,
   onLogout,
   showKeyboardHelp,
-  setShowKeyboardHelp
+  setShowKeyboardHelp,
 }: HeaderProps) {
-
-  const getContrastLabel = () => {
-    if (contrastMode === 'normal') return 'Contraste: Padrão';
-    if (contrastMode === 'high-contrast') return 'Contraste: Alto';
-    return 'Contraste: Invertido';
-  };
-
   return (
-    <header className="w-full border-b border-slate-800 bg-[#0f172a]/80 backdrop-blur px-6 py-4 flex items-center justify-between gap-4">
-      
-      {/* Lado Esquerdo */}
-      <div className="flex items-center gap-3">
-        <div className="h-10 w-10 rounded-xl bg-blue-600/10 flex items-center justify-center text-blue-500 text-xl">
-          🎓
-        </div>
-        <div>
-          <h2 className="font-bold text-base text-white leading-tight">E.E. Dom Pedro II</h2>
-          <p className="text-xs text-slate-400">Mural de Avisos Escolar</p>
-        </div>
-      </div>
-
-      {/* Lado Direito: Controles Conectados com o App.tsx */}
-      <div className="flex items-center gap-3">
-        
-        {/* Controle do Zoom de Fonte */}
-        <div role="group" aria-label="Tamanho do texto" className="flex items-center rounded-lg border border-slate-700 bg-[#0f172a] overflow-hidden h-9">
-          <button type="button" onClick={onFontDecrease} className="px-3 hover:bg-slate-800 font-bold text-sm text-white h-full transition-colors">A−</button>
-          <span className="px-2 text-xs font-mono border-x border-slate-700 text-slate-300 bg-slate-800/50 flex items-center h-full">{fontSize}px</span>
-          <button type="button" onClick={onFontIncrease} className="px-3 hover:bg-slate-800 font-bold text-sm text-white h-full transition-colors">A+</button>
-        </div>
-
-        {/* Correção Bug #01: Alternador de Contraste Cíclico */}
-        <button
-          type="button"
-          onClick={onCycleContrast}
-          className="flex h-9 items-center gap-2 rounded-lg border border-slate-700 bg-[#0f172a] px-3 text-xs font-medium text-slate-200 hover:bg-slate-800 transition-all"
-        >
-          <Eye size={14} className="text-blue-400" />
-          <span>{getContrastLabel()}</span>
-        </button>
-
-        {/* Correção Bug #02: Botão de Atalhos do Teclado Ativo */}
-        <button
-          type="button"
-          onClick={() => setShowKeyboardHelp(!showKeyboardHelp)}
-          className={`flex h-9 w-9 items-center justify-center rounded-lg border transition-colors ${showKeyboardHelp ? 'bg-blue-600 border-blue-600 text-white' : 'border-slate-700 bg-[#0f172a] text-slate-200 hover:bg-slate-800'}`}
-          title="Ver atalhos de teclado"
-        >
-          <Keyboard size={16} />
-        </button>
-
-        <div className="h-6 w-[1px] bg-slate-800 hidden sm:block"></div>
-
-        {/* Identificação do Usuário Logado */}
-        <div className="flex items-center gap-2 hidden sm:flex">
-          <div className="h-8 w-8 rounded-full bg-slate-800 flex items-center justify-center text-slate-400 border border-slate-700">
-            <User size={16} />
+    <header className="border-b border-slate-800 bg-[#0d1527] sticky top-0 z-50 transition-colors">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+        <div className="flex h-16 items-center justify-between gap-4">
+          
+          {/* Logo / Identificação */}
+          <div className="flex items-center gap-3">
+            <div className="flex h-9 w-9 items-center justify-center rounded-xl bg-blue-600 font-bold text-white">
+              🎓
+            </div>
+            <div>
+              <span className="block text-sm font-bold tracking-tight text-white">E.E. Dom Pedro II</span>
+              <span className="block text-xs text-slate-400">Mural de Avisos</span>
+            </div>
           </div>
-          <div className="text-left">
-            <p className="text-xs font-bold leading-tight text-white">heitorr</p>
-            <p className="text-[10px] text-slate-400">Responsável</p>
+
+          {/* Barra de Ferramentas de Acessibilidade */}
+          <div className="flex items-center gap-2">
+            
+            {/* Controles de Zoom */}
+            <div className="flex items-center rounded-xl border border-slate-800 bg-[#0b121f] p-1">
+              <button
+                onClick={onFontDecrease}
+                title="Diminuir texto (Alt + 2)"
+                aria-label="Diminuir tamanho do texto"
+                className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-800 hover:text-white transition-colors"
+              >
+                <ZoomOut size={18} />
+              </button>
+              <span className="px-2 text-xs font-medium text-slate-400 min-w-[40px] text-center" aria-live="polite">
+                {fontSize}px
+              </span>
+              <button
+                onClick={onFontIncrease}
+                title="Aumentar texto (Alt + 1)"
+                aria-label="Aumentar tamanho do texto"
+                className="rounded-lg p-1.5 text-slate-400 hover:bg-slate-800 hover:text-white transition-colors"
+              >
+                <ZoomIn size={18} />
+              </button>
+            </div>
+
+            {/* Alternador de Contraste */}
+            <button
+              onClick={onCycleContrast}
+              title="Alternar contraste (Alt + 3)"
+              aria-label={`Mudar modo de contraste. Atual: ${contrastMode}`}
+              className={cn(
+                "rounded-xl border p-2 transition-all flex items-center gap-1.5 text-xs font-medium",
+                contrastMode === 'high-contrast'
+                  ? "bg-yellow-400 border-yellow-400 text-black font-bold"
+                  : "bg-[#0b121f] border-slate-800 text-slate-400 hover:text-white hover:bg-slate-800"
+              )}
+            >
+              <Eye size={18} />
+              <span className="hidden sm:inline">
+                {contrastMode === 'normal' && 'Contraste'}
+                {contrastMode === 'high-contrast' && 'Alto Contraste'}
+                {contrastMode === 'inverted' && 'Invertido'}
+              </span>
+            </button>
+
+            {/* Ajuda de Teclado */}
+            <button
+              onClick={() => setShowKeyboardHelp(!showKeyboardHelp)}
+              title="Atalhos do teclado (Alt + 4)"
+              aria-label="Mostrar mapa de atalhos de acessibilidade"
+              aria-expanded={showKeyboardHelp}
+              className={cn(
+                "rounded-xl border p-2 transition-all",
+                showKeyboardHelp 
+                  ? "bg-blue-600 border-blue-600 text-white" 
+                  : "bg-[#0b121f] border-slate-800 text-slate-400 hover:text-white"
+              )}
+            >
+              <Keyboard size={18} />
+            </button>
+
+            <div className="h-6 w-[1px] bg-slate-800 mx-1" />
+
+            {/* Sair */}
+            <button
+              onClick={onLogout}
+              aria-label="Fazer logout do sistema"
+              className="flex items-center gap-2 rounded-xl bg-red-950/40 border border-red-900/30 px-3 py-2 text-xs font-semibold text-red-400 hover:bg-red-900/50 hover:text-white transition-all"
+            >
+              <LogOut size={14} />
+              <span className="hidden md:inline">Sair</span>
+            </button>
+
           </div>
         </div>
-
-        {/* Logout */}
-        <button
-          type="button"
-          onClick={onLogout}
-          className="flex h-9 items-center gap-2 rounded-lg bg-red-950/30 text-red-400 border border-red-900/40 px-3 text-xs font-bold hover:bg-red-900/30 transition-colors"
-        >
-          <LogOut size={14} />
-          <span className="hidden sm:inline">Sair</span>
-        </button>
       </div>
     </header>
   );
