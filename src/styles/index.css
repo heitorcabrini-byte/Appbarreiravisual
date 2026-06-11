@@ -1,103 +1,59 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
 
-@layer base {
-  :root {
-    --background: 240 10% 3.9%;
-    --foreground: 0 0% 98%;
-    --card: 240 10% 3.9%;
-    --card-foreground: 0 0% 98%;
-    --popover: 240 10% 3.9%;
-    --popover-foreground: 0 0% 98%;
-    --primary: 240 5.9% 90%;
-    --primary-foreground: 240 5.9% 10%;
-    --secondary: 240 3.7% 15.9%;
-    --secondary-foreground: 0 0% 98%;
-    --muted: 240 3.7% 15.9%;
-    --muted-foreground: 240 5% 64.9%;
-    --accent: 240 3.7% 15.9%;
-    --accent-foreground: 0 0% 98%;
-    --destructive: 0 62.8% 30.6%;
-    --destructive-foreground: 0 0% 98%;
-    --border: 240 3.7% 15.9%;
-    --input: 240 3.7% 15.9%;
-    --ring: 240 4.9% 83.9%;
-  }
-}
-
-/* Regras de Alto Contraste Ativadas dinamicamente via Classes Raiz */
+/* 🟡 REGRAS IMPLACÁVEIS PARA ALTO CONTRASTE (Acessibilidade) */
 .high-contrast {
   background-color: #000000 !important;
-  color: #facc15 !important; /* Amarelo */
+  color: #ffffff !important;
 }
 
-.high-contrast * {
-  background-color: transparent !important;
-  color: #facc15 !important;
-  border-color: #facc15 !important;
+.high-contrast body,
+.high-contrast #root,
+.high-contrast .min-h-screen,
+.high-contrast main {
+  background-color: #000000 !important;
+  color: #ffffff !important;
 }
 
-.high-contrast button, 
-.high-contrast input, 
-.high-contrast a,
-.high-contrast kbd {
+/* Força todos os cards a virarem pretos com bordas amarelas */
+.high-contrast .accessibility-card {
+  background-color: #000000 !important;
   border: 2px solid #facc15 !important;
-  background-color: #000000 !important;
+  color: #ffffff !important;
+  box-shadow: none !important;
 }
 
-.inverted-contrast {
-  background-color: #ffffff !important;
-  color: #000000 !important;
-}
-
-.inverted-contrast * {
-  background-color: transparent !important;
-  color: #000000 !important;
-  border-color: #000000 !important;
-}
-
-.inverted-contrast button, 
-.inverted-contrast input, 
-.inverted-contrast a,
-.inverted-contrast kbd {
-  border: 2px solid #000000 !important;
-  background-color: #ffffff !important;
-}
-/* Customização global para os modos de acessibilidade no Tailwind v4 */
-
-/* 🟡 Regras para o Alto Contraste */
-.high-contrast {
-  --background: #000000 !important;
-  --foreground: #ffffff !important;
-  --primary: #facc15 !important; /* Amarelo */
-  --primary-foreground: #000000 !important;
-  --secondary: #000000 !important;
-  --muted-foreground: #ffffff !important;
-  --border: #facc15 !important;
-  background-color: #000000 !important;
+/* Força os textos internos dos cards a ficarem brancos e legíveis */
+.high-contrast .accessibility-title,
+.high-contrast .accessibility-text,
+.high-contrast .accessibility-meta span,
+.high-contrast .accessibility-footer button {
   color: #ffffff !important;
 }
 
-.high-contrast bg-secondary, 
-.high-contrast .bg-[#0d1527], 
-.high-contrast .bg-slate-900 {
+/* Badges e tags em alto contraste */
+.high-contrast .accessibility-badge,
+.high-contrast .accessibility-tag {
   background-color: #000000 !important;
-  border-color: #facc15 !important;
+  border: 1px solid #facc15 !important;
+  color: #facc15 !important;
 }
 
-.high-contrast text-slate-300, 
-.high-contrast text-slate-400,
-.high-contrast p {
-  color: #ffffff !important;
+.high-contrast .accessibility-dot {
+  background-color: #facc15 !important;
 }
 
-/* ⚪ Regras para o Modo Invertido */
+/* Força os links de ação em destaque a ficarem amarelos */
+.high-contrast text-blue-400,
+.high-contrast .text-blue-400,
+.high-contrast .accessibility-footer font-bold {
+  color: #facc15 !important;
+}
+
+/* ⚪ REGRAS PARA MODO INVERTIDO */
 .inverted-contrast {
   filter: invert(1) hue-rotate(180deg);
 }
-/* Impede que imagens ou emojis fiquem com as cores zoadas no modo invertido */
 .inverted-contrast img, 
-.inverted-contrast [aria-hidden="true"] {
+.inverted-contrast svg {
   filter: invert(1) hue-rotate(180deg);
 }
