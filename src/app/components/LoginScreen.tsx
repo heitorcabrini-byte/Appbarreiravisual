@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, FormEvent } from 'react';
-import { Eye, EyeOff, GraduationCap, Mail, Lock, AlertCircle, LogIn, Keyboard, X } from 'lucide-react';
+import { Eye, EyeOff, Mail, Lock, AlertCircle, LogIn, Keyboard, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from './ui/utils';
 import { RegisterForm } from './RegisterForm';
@@ -9,7 +9,7 @@ import {
   LOGIN_ERROR_MESSAGES,
   type Session,
   type LoginError,
-} from '../../data/users';
+} from '../../../data/users'; // <--- CAMINHO CORRIGIDO AQUI!
 
 type ContrastMode = 'normal' | 'high-contrast' | 'inverted';
 
