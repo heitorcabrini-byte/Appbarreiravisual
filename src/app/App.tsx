@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import { LoginScreen } from './components/LoginScreen';
-// Importe aqui o seu componente do Mural de Avisos, ex:
-// import { Dashboard } from './components/Dashboard'; 
+// Certifique-se de manter o import correto do componente do seu mural aqui embaixo, por exemplo:
+// import { MuralDashboard } from './components/MuralDashboard';
 
 type ContrastMode = 'normal' | 'high-contrast' | 'inverted';
 
@@ -14,7 +14,7 @@ export default function App() {
   const minFont = 16;
   const maxFont = 28;
 
-  // Sincroniza os modos de contraste injetando classes na raiz HTML do navegador
+  // Injeta os múltiplos modos de contraste direto na tag raiz do navegador (HTML)
   useEffect(() => {
     const root = document.documentElement;
     root.classList.remove('high-contrast', 'inverted-contrast');
@@ -22,7 +22,6 @@ export default function App() {
     if (contrastMode === 'inverted') root.classList.add('inverted-contrast');
   }, [contrastMode]);
 
-  // Funções globais de tamanho de fonte
   const handleFontIncrease = () => setFontSize(f => Math.min(f + 2, maxFont));
   const handleFontDecrease = () => setFontSize(f => Math.max(f - 2, minFont));
   
@@ -48,10 +47,10 @@ export default function App() {
           onLoginSuccess={(userSession) => setSession(userSession)}
         />
       ) : (
-        /* AQUI VAI O COMPONENTE DO SEU MURAL DE AVISOS.
-          Passe as mesmas propriedades para a barra de acessibilidade do mural!
-          Exemplo:
-          <Dashboard 
+        /* AQUI FICA O COMPONENTE DO SEU MURAL LOGADO.
+          Insira a mesma barra de acessibilidade nele passando as propriedades globais abaixo:
+          
+          <MuralDashboard 
             fontSize={fontSize}
             contrastMode={contrastMode}
             onFontIncrease={handleFontIncrease}
@@ -61,27 +60,17 @@ export default function App() {
             onLogout={() => setSession(null)}
           />
         */
-        <div className="p-8">
-          {/* Substitua esta div temporária pela estrutura real do seu mural se necessário */}
-          <h1 className="text-2xl font-bold">Mural de Avisos Carregado</h1>
-          <button onClick={() => setSession(null)} className="mt-4 bg-red-600 px-4 py-2 rounded">Sair</button>
-        </div>
-      )}
-
-      {/* Modal Global de Atalhos de Teclado (Funciona em qualquer tela) */}
-      {showKeyboardHelp && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/80 p-4">
-          <div className="w-full max-w-md rounded-2xl border bg-neutral-900 p-6 text-white border-neutral-700">
-            <h3 className="text-lg font-bold mb-4">⌨️ Atalhos de Navegação</h3>
-            <ul className="space-y-3 text-sm">
-              <li><kbd className="bg-neutral-800 px-1.5 py-0.5 rounded border border-neutral-600 font-mono">Tab</kbd> Avança para o próximo elemento.</li>
-              <li><kbd className="bg-neutral-800 px-1.5 py-0.5 rounded border border-neutral-600 font-mono">Shift + Tab</kbd> Volta para o elemento anterior.</li>
-              <li><kbd className="bg-neutral-800 px-1.5 py-0.5 rounded border border-neutral-600 font-mono">Enter</kbd> Ativa links e botões.</li>
-            </ul>
-            <button onClick={() => setShowKeyboardHelp(false)} className="mt-6 w-full bg-white text-black font-bold py-2 rounded-xl">
-              Fechar
-            </button>
+        <div className={cn("p-8 min-h-screen transition-colors", contrastMode !== 'normal' ? 'bg-black text-white' : 'bg-background')}>
+          <div className="flex justify-between items-center mb-6 border-b pb-4 border-border">
+            <h1 className="text-2xl font-bold">Mural de Avisos Escolar</h1>
+            <div className="flex gap-2">
+              <button type="button" onClick={cycleContrast} className="px-3 py-1.5 border rounded text-xs font-bold">Mudar Contraste</button>
+              <button type="button" onClick={handleFontIncrease} className="px-3 py-1.5 border rounded text-xs font-bold">A+</button>
+              <button type="button" onClick={handleFontDecrease} className="px-3 py-1.5 border rounded text-xs font-bold">A-</button>
+              <button type="button" onClick={() => setSession(null)} className="bg-destructive text-white px-3 py-1.5 rounded text-xs font-bold">Sair</button>
+            </div>
           </div>
+          <p className="text-sm">O conteúdo do seu mural agora herda o zoom dinâmico de {fontSize}px e os estilos visuais de alto contraste selecionados.</p>
         </div>
       )}
     </div>
