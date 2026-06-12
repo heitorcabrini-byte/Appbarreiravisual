@@ -1,10 +1,12 @@
 @import "tailwindcss";
 
 /* ==========================================================================
-   ♿ SOBREPOSIÇÃO RADICAL DE ACESSIBILIDADE VISUAL (FORÇA BRUTA WCAG AAA)
+   ♿ SISTEMA DE ACESSIBILIDADE VISUAL (FORÇA BRUTA COMPATÍVEL COM TAILWIND V4)
    ========================================================================== */
 
-/* ─── 1️⃣ MODO ALTO CONTRASTE ABSOLUTO (Fundo Preto / Letras e Bordas Amarelas ou Brancas) ─── */
+/* ─── 1️⃣ MODO ALTO CONTRASTE ABSOLUTO ─── */
+
+/* Altera o fundo do documento principal */
 html.high-contrast,
 html.high-contrast body,
 body.high-contrast {
@@ -14,29 +16,19 @@ body.high-contrast {
   color-scheme: dark !important;
 }
 
-/* ⚡ REGRA MESTRE: Altera absolutamente TODOS os elementos internos da página */
+/* ⚡ SOBREPOSIÇÃO UNIVERSAL: Altera a cor de todas as letras e elementos internos */
 body.high-contrast * {
-  /* Força todas as fontes para negrito pesado e aumenta o contraste da letra */
-  font-weight: 900 !important;
-  -webkit-text-stroke: 0.5px #000000;
-  
-  /* Transforma todas as cores de texto da página para Amarelo ou Branco Puro */
-  color: #ffff00 !important;
-  
-  /* Força todos os fundos de cards, cabeçalho e inputs a ficarem pretos */
-  background-color: #000000 !important;
+  font-weight: 900 !important; /* Força todas as letras em negrito pesado */
+  color: #ffff00 !important;    /* Transforma todas as letras em Amarelo Puro */
+  background-color: #000000 !important; /* Força todos os fundos a ficarem Pretos */
   background: #000000 !important;
-  
-  /* Cria um contorno/borda visível e nítido em volta de absolutamente tudo */
-  border-color: #ffffff !important;
-  
-  /* Remove sombras e efeitos que borram a visão de quem tem astigmatismo */
+  border-color: #ffffff !important;     /* Aplica o contorno visível em tudo */
   box-shadow: none !important;
   text-shadow: none !important;
   background-image: none !important;
 }
 
-/* Textos secundários ou parágrafos de descrição longa ganham branco puro para não cansar as vistas */
+/* Ajuste fino para descrições longas, tags e parágrafos usarem branco puro */
 body.high-contrast p,
 body.high-contrast span,
 body.high-contrast time,
@@ -44,7 +36,7 @@ body.high-contrast input::placeholder {
   color: #ffffff !important;
 }
 
-/* Inputs, Selects e Botões ganham uma borda branca muito mais grossa e visível */
+/* Força contornos e bordas mais espessas em caixas de entrada e botões */
 body.high-contrast input,
 body.high-contrast select,
 body.high-contrast button,
@@ -53,7 +45,7 @@ body.high-contrast nav {
   outline: 2px solid #ffffff !important;
 }
 
-/* EFEITO DE INVERSÃO NO HOVER/FOCO: O botão apontado acende em Amarelo com Letras Pretas */
+/* Efeito de foco/interação: quando passa o mouse, inverte (Fundo Amarelo / Letra Preta) */
 body.high-contrast button:hover,
 body.high-contrast button[aria-checked="true"],
 body.high-contrast input:focus,
@@ -66,7 +58,7 @@ body.high-contrast button[aria-checked="true"] * {
   border-color: #000000 !important;
 }
 
-/* Força todos os ícones e vetores SVG a ficarem brancos e espessos na tela */
+/* Deixa os ícones e vetores visíveis em branco espesso */
 body.high-contrast svg,
 body.high-contrast svg * {
   stroke: #ffffff !important;
@@ -76,7 +68,7 @@ body.high-contrast svg * {
 }
 
 
-/* ─── 2️⃣ MODO INVERTIDO GLOBAL COMPLETO ─── */
+/* ─── 2️⃣ MODO INVERTIDO GLOBAL ─── */
 html.inverted,
 html.inverted body,
 body.inverted {
@@ -84,12 +76,12 @@ body.inverted {
   background-color: #ffffff !important;
 }
 
-/* Garante que tudo dentro do modo invertido mude de peso e ganhe letras legíveis */
+/* Garante letras em negrito marcado durante o modo invertido */
 body.inverted * {
   font-weight: 800 !important;
 }
 
-/* Reinverte as mídias e emojis para que não fiquem assustadores ou com cores erradas */
+/* Reinverte imagens e mídias para que mantenham o aspecto original */
 body.inverted img,
 body.inverted [role="img"],
 body.inverted span[aria-hidden="true"],
@@ -102,5 +94,5 @@ body.inverted svg {
 /* ─── 3️⃣ MODO NORMAL ─── */
 html.normal,
 body.normal {
-  /* Respeita perfeitamente o seu layout padrão */
+  /* Mantém a estilização nativa padrão do seu app */
 }
