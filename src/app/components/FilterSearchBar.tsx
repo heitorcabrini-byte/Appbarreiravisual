@@ -33,7 +33,6 @@ export function FilterSearchBar({
   const filterRefs = useRef<(HTMLButtonElement | null)[]>([]);
 
   const handleFilterKeyDown = (e: KeyboardEvent, index: number) => {
-    // Garante segurança caso FILTER_OPTIONS venha zerado por erro de importação
     const optionsLength = FILTER_OPTIONS?.length || 0;
     if (optionsLength === 0) return;
 
@@ -152,7 +151,17 @@ export function FilterSearchBar({
               style={{ fontSize: '0.9rem', minHeight: '44px', cursor: 'pointer' }}
             >
               {SORT_OPTIONS.map(o => (
-                <option key={o.value} value={o.value} className="bg-secondary text-foreground">
+                /* ⚡ SOLUÇÃO DO MENU BRANCO: Forçando background escuro e cor da fonte nas options */
+                <option 
+                  key={o.value} 
+                  value={o.value} 
+                  className={cn(
+                    "p-3 font-medium",
+                    highContrast 
+                      ? "bg-black text-white hover:bg-zinc-900" 
+                      : "bg-[#0d1527] text-white hover:bg-[#131f38]"
+                  )}
+                >
                   {o.label}
                 </option>
               ))}
@@ -161,7 +170,7 @@ export function FilterSearchBar({
         </div>
       </div>
 
-      {/* Results summary (Proteção contra undefined aplicada aqui) */}
+      {/* Results summary */}
       <div role="status" aria-live="polite" aria-atomic="true" className="mt-3 text-muted-foreground" style={{ fontSize: '0.85rem' }}>
         {search ? (
           <span>
