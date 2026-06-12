@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, FormEvent } from 'react';
-import { User, Mail, Lock, Eye, EyeOff, AlertCircle, UserPlus, CheckCircle2, ChevronDown } from 'lucide-react';
+import { User, Mail, Lock, Eye, EyeOff, AlertCircle, UserPlus, CheckCircle2 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { cn } from './ui/utils';
 import {
