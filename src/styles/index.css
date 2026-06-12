@@ -11,12 +11,12 @@ html.high-contrast {
 /* 🖤 FUNDO PRETO ABSOLUTO COM TRANSIÇÃO SUAVE */
 html.high-contrast body,
 html.high-contrast #root,
-html.high-contrast .app-container,
+html.high-contrast .app-main-wrapper,
 html.high-contrast main,
 html.high-contrast div:not(.custom-alert-strip):not(.profile-avatar) {
   background-color: #000000 !important;
   background: #000000 !important;
-  transition: background-color 0.3s ease, border-color 0.3s ease;
+  transition: background-color 0.2s ease, border-color 0.2s ease;
 }
 
 /* 👑 CABEÇALHO SUPERIOR (HEADER): Amarelo com cantos originais preservados */
@@ -28,7 +28,7 @@ html.high-contrast [role="banner"] {
   border-bottom: 1px solid #d6a100 !important;
 }
 
-/* Textos dentro do cabeçalho em preto suave (não puro) para não agredir os olhos */
+/* Textos dentro do cabeçalho em preto suave para não agredir os olhos */
 html.high-contrast header *,
 html.high-contrast header button,
 html.high-contrast header span,
@@ -42,7 +42,7 @@ html.high-contrast header svg * {
   fill: transparent !important;
 }
 
-/* 🟨 BARRA DE ALERTA DE ACESSIBILIDADE */
+/* 🟨 BARRA DE ALERTA DE ACESSIBILIDADE DEBAIXO DO TOP */
 html.high-contrast .custom-alert-strip {
   background-color: #171401 !important;
   color: #facc15 !important;
@@ -51,13 +51,20 @@ html.high-contrast .custom-alert-strip {
   letter-spacing: 0.025em;
 }
 
+/* 👤 LINHA DO PERFIL DO USUÁRIO LOGADO */
+html.high-contrast .user-profile-strip {
+  background-color: #000000 !important;
+  border-bottom: 1px solid #1e293b !important;
+}
+
 /* 📋 CARDS DE AVISO (MURAL): Bordas arredondadas e design elegante do Figma */
 html.high-contrast .announcements-grid > div,
 html.high-contrast main article {
   background-color: #140a04 !important; /* Tom marrom escuro suave */
   border: 1.5px solid #4a270f !important; /* Borda mais fina e menos agressiva */
-  border-radius: 1rem !important; /* Devolve o arredondamento leve */
+  border-radius: 1rem !important; /* Devolve o arredondamento leve original */
   padding: 1.5rem !important;
+  box-shadow: none !important;
 }
 
 /* Textos internos dos cards */
@@ -86,17 +93,19 @@ html.high-contrast .announcements-grid span[class*="bg-"] {
   padding: 0.25rem 0.5rem !important;
 }
 
-/* Botões internos de ação (Ouvir, Salvar) */
+/* Botões internos de ação (Ouvir, Salvar, Ver Aviso) */
 html.high-contrast .announcements-grid button,
-html.high-contrast .announcements-grid a {
+html.high-contrast .announcements-grid a,
+html.high-contrast main article button {
   border: 1px solid #4a270f !important;
   background-color: #1c0f06 !important;
   color: #ffffff !important;
   border-radius: 0.5rem !important;
-  transition: all 0.2s ease;
+  transition: all 0.2s ease !important;
 }
 
-html.high-contrast .announcements-grid button:hover {
+html.high-contrast .announcements-grid button:hover,
+html.high-contrast main article button:hover {
   background-color: #2d190b !important;
   border-color: #facc15 !important;
 }
@@ -111,8 +120,47 @@ html.high-contrast select {
   border-radius: 0.75rem !important;
 }
 
-/* Botões de Filtro Desativados */
+/* Botões de Filtro de Categoria Desativados */
 html.high-contrast main button:not([aria-checked="true"]):not(.logout-btn) {
   background-color: #0f0f10 !important;
   color: #a1a1aa !important;
-  border: 1
+  border: 1px solid #27272a !important;
+  border-radius: 0.5rem !important;
+}
+
+/* Botão de Filtro Ativo (Ex: Filtro "Todos") */
+html.high-contrast button[aria-checked="true"],
+html.high-contrast button[class*="bg-yellow-500"],
+html.high-contrast .bg-yellow-500 {
+  background-color: #facc15 !important;
+  background: #facc15 !important;
+  color: #000000 !important;
+  font-weight: 700 !important;
+}
+
+/* 🔐 TELA DE LOGIN: Caixa centralizada elegante com borda amarela fina */
+html.high-contrast .max-w-md,
+html.high-contrast form {
+  background-color: #0c0c0d !important;
+  border: 2px solid #facc15 !important;
+  border-radius: 1rem !important;
+}
+
+html.high-contrast button[type="submit"] {
+  background-color: #facc15 !important;
+  color: #000000 !important;
+  font-weight: 700 !important;
+  border-radius: 0.75rem !important;
+}
+
+/* ─── 🔄 MODO INVERTIDO GLOBAL ─── */
+html.inverted,
+html.inverted body {
+  filter: invert(1) hue-rotate(180deg) !important;
+  background-color: #ffffff !important;
+}
+
+html.inverted img, 
+html.inverted svg {
+  filter: invert(1) hue-rotate(180deg) !important;
+}
