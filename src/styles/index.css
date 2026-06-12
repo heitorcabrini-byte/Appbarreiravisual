@@ -1,70 +1,104 @@
 @import "tailwindcss";
 
 /* ==========================================================================
-   ♿ SISTEMA DE ACESSIBILIDADE VISUAL (FORÇA BRUTA COMPATÍVEL COM TAILWIND V4)
+   ♿ DIRETRIZES FIÉIS AO FIGMA — ALTO CONTRASTE & INVERSÃO (TAILWIND v4)
    ========================================================================== */
 
-/* ─── 1️⃣ MODO ALTO CONTRASTE ABSOLUTO ─── */
-
-/* Altera o fundo do documento principal */
+/* ─── 1️⃣ MODO ALTO CONTRASTE (IGUAL AO FIGMA) ─── */
 html.high-contrast,
 html.high-contrast body,
 body.high-contrast {
   background-color: #000000 !important;
   background: #000000 !important;
-  color: #ffff00 !important;
+  color: #ffffff !important;
   color-scheme: dark !important;
 }
 
-/* ⚡ SOBREPOSIÇÃO UNIVERSAL: Altera a cor de todas as letras e elementos internos */
-body.high-contrast * {
-  font-weight: 900 !important; /* Força todas as letras em negrito pesado */
-  color: #ffff00 !important;    /* Transforma todas as letras em Amarelo Puro */
-  background-color: #000000 !important; /* Força todos os fundos a ficarem Pretos */
+/* Força o container principal a remover o fundo azul padrão do Figma normal */
+body.high-contrast div[class*="bg-[#060b13]"],
+body.high-contrast div[class*="min-h-screen"] {
+  background-color: #000000 !important;
   background: #000000 !important;
-  border-color: #ffffff !important;     /* Aplica o contorno visível em tudo */
-  box-shadow: none !important;
-  text-shadow: none !important;
-  background-image: none !important;
 }
 
-/* Ajuste fino para descrições longas, tags e parágrafos usarem branco puro */
-body.high-contrast p,
-body.high-contrast span,
-body.high-contrast time,
-body.high-contrast input::placeholder {
-  color: #ffffff !important;
+/* 🟨 BARRA SUPERIOR (HEADER): Fundo Amarelo com Textos/Ícones Pretos */
+body.high-contrast header,
+body.high-contrast nav,
+body.high-contrast .bg-slate-900,
+body.high-contrast div[class*="bg-"] {
+  /* Alvos de cabeçalhos e caixas superiores */
 }
 
-/* Força contornos e bordas mais espessas em caixas de entrada e botões */
-body.high-contrast input,
-body.high-contrast select,
-body.high-contrast button,
-body.high-contrast nav {
-  border: 3px solid #ffffff !important;
-  outline: 2px solid #ffffff !important;
-}
-
-/* Efeito de foco/interação: quando passa o mouse, inverte (Fundo Amarelo / Letra Preta) */
-body.high-contrast button:hover,
-body.high-contrast button[aria-checked="true"],
-body.high-contrast input:focus,
-body.high-contrast select:focus,
-body.high-contrast button:hover *,
-body.high-contrast button[aria-checked="true"] * {
-  background-color: #ffff00 !important;
-  background: #ffff00 !important;
+/* Seletor específico para o Header superior ficar amarelo puro */
+body.high-contrast header, 
+body.high-contrast header * {
+  background-color: #facc15 !important;
   color: #000000 !important;
   border-color: #000000 !important;
 }
 
-/* Deixa os ícones e vetores visíveis em branco espesso */
-body.high-contrast svg,
-body.high-contrast svg * {
-  stroke: #ffffff !important;
+/* Ajuste dos ícones do Header para que apareçam pretos no fundo amarelo */
+body.high-contrast header svg,
+body.high-contrast header svg * {
+  stroke: #000000 !important;
+  color: #000000 !important;
+}
+
+/* 📋 CARDS DE AVISO: Fundo marrom/cinza ultra escuro e bordas nítidas */
+body.high-contrast main div[class*="bg-"],
+body.high-contrast .grid > div {
+  background-color: #120c08 !important; /* Tom escuro de contraste dos cards do Figma */
+  border: 2px solid #854d0e !important;   /* Borda bem definida */
+  box-shadow: none !important;
+}
+
+/* Todos os textos internos dos cards e do corpo principal viram branco puro */
+body.high-contrast main *,
+body.high-contrast main p,
+body.high-contrast main span,
+body.high-contrast main time {
   color: #ffffff !important;
-  stroke-width: 3px !important;
-  fill: transparent !important;
+}
+
+/* Títulos do mural e dos cards ganham peso extra */
+body.high-contrast h1,
+body.high-contrast h2,
+body.high-contrast h3,
+body.high-contrast strong {
+  color: #ffffff !important;
+  font-weight: 900 !important;
+}
+
+/* 🔍 INTERFACE DE BUSCA E FILTROS */
+body.high-contrast input[type="search"],
+body.high-contrast select {
+  background-color: #1a1a1a !important;
+  color: #ffffff !important;
+  border: 2px solid #ffffff !important;
+}
+
+/* Botão "Todos" ativo em amarelo vibrante */
+body.high-contrast button[class*="bg-yellow"],
+body.high-contrast button[aria-checked="true"] {
+  background-color: #facc15 !important;
+  color: #000000 !important;
+}
+
+/* 🔐 TELA DE LOGIN: Força os inputs e o card central a alinharem com o Figma */
+body.high-contrast div.max-w-md,
+body.high-contrast form {
+  background-color: #121212 !important;
+  border: 3px solid #facc15 !important;
+}
+
+body.high-contrast div.max-w-md * {
+  color: #ffffff !important;
+}
+
+body.high-contrast button[type="submit"] {
+  background-color: #facc15 !important;
+  color: #000000 !important;
+  font-weight: 900 !important;
 }
 
 
@@ -76,17 +110,10 @@ body.inverted {
   background-color: #ffffff !important;
 }
 
-/* Garante letras em negrito marcado durante o modo invertido */
-body.inverted * {
-  font-weight: 800 !important;
-}
-
-/* Reinverte imagens e mídias para que mantenham o aspecto original */
 body.inverted img,
 body.inverted [role="img"],
 body.inverted span[aria-hidden="true"],
-body.inverted .emoji,
-body.inverted svg {
+body.inverted .emoji {
   filter: invert(1) hue-rotate(180deg) !important;
 }
 
@@ -94,5 +121,5 @@ body.inverted svg {
 /* ─── 3️⃣ MODO NORMAL ─── */
 html.normal,
 body.normal {
-  /* Mantém a estilização nativa padrão do seu app */
+  /* Mantém o padrão escuro original */
 }
