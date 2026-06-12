@@ -1,32 +1,38 @@
 @import "tailwindcss";
 
 /* ==========================================================================
-   ♿ SOBREPOSIÇÃO FORÇADA DE ALTO CONTRASTE (ALINHADO AO FIGMA)
+   ♿ SOBREPOSIÇÃO UNIVERSAL DE ALTO CONTRASTE (ESTILO FIEL AO FIGMA)
    ========================================================================== */
 
-/* Se o alto contraste estiver ativo, força TODA a estrutura de fundo a ser preta */
-html.high-contrast,
-html.high-contrast body,
-html.high-contrast #root,
-html.high-contrast div,
-html.high-contrast main {
+/* ─── 🟨 1️⃣ MODO ALTO CONTRASTE ACTIVADO ─── */
+html.high-contrast {
   background-color: #000000 !important;
-  color: #ffffff !important;
 }
 
-/* 👑 BARRA SUPERIOR (HEADER): Fundo Amarelo Ouro e elementos em Preto */
+/* Força o fundo de toda a página, divs, seções e main a ficarem preto absoluto */
+html.high-contrast body,
+html.high-contrast #root,
+html.high-contrast main,
+html.high-contrast div,
+html.high-contrast section {
+  background-color: #000000 !important;
+  background: #000000 !important;
+}
+
+/* 👑 CABEÇALHO SUPERIOR (HEADER): Fundo amarelo ouro com tudo em preto puro */
 html.high-contrast header,
 html.high-contrast header *,
 html.high-contrast nav,
 html.high-contrast nav *,
-html.high-contrast div[class*="bg-slate-900"],
-html.high-contrast div[class*="bg-slate-900"] * {
+html.high-contrast [role="banner"],
+html.high-contrast [role="banner"] * {
   background-color: #facc15 !important;
+  background: #facc15 !important;
   color: #000000 !important;
   border-color: #000000 !important;
 }
 
-/* Força os ícones SVG dentro do cabeçalho a ficarem pretos */
+/* Força os ícones SVG e contornos do cabeçalho a ficarem pretos */
 html.high-contrast header svg,
 html.high-contrast header svg *,
 html.high-contrast nav svg,
@@ -36,43 +42,50 @@ html.high-contrast nav svg * {
   fill: transparent !important;
 }
 
-/* 📋 CARDS DE AVISO: Fundo escuro avermelhado/marrom com bordas douradas */
+/* 📋 CARDS DE AVISO DO MURAL: Fundo marrom escuro com borda dourada nítida */
 html.high-contrast main .grid > div,
-html.high-contrast main div[class*="bg-"],
-html.high-contrast article {
-  background-color: #120c08 !important; /* Tom idêntico ao do Figma */
-  border: 2px solid #854d0e !important;  /* Borda nítida */
+html.high-contrast main article,
+html.high-contrast main div[class*="bg-"] {
+  background-color: #120c08 !important; /* Tom do Figma */
+  border: 3px solid #854d0e !important;   /* Contorno reforçado */
   box-shadow: none !important;
 }
 
-/* Força todos os textos dentro do conteúdo principal a serem branco puro */
+/* Garante legibilidade: todos os textos dentro do conteúdo principal viram branco puro */
 html.high-contrast main *,
 html.high-contrast main h1,
 html.high-contrast main h2,
+html.high-contrast main h3,
 html.high-contrast main p,
 html.high-contrast main span,
 html.high-contrast main time {
   color: #ffffff !important;
 }
 
-/* 🔍 CAIXA DE BUSCA E SELECTS */
+/* 🔥 PEQUENOS DETALHES DOS CARDS (Botões internos Ouvir/Salvar/Ver Aviso) */
+html.high-contrast main .grid > div *,
+html.high-contrast main article * {
+  background-color: transparent !important;
+}
+
+/* 🔍 CAIXAS DE FILTROS, SELECTS E INPUT DE BUSCA */
 html.high-contrast input,
 html.high-contrast input[type="search"],
 html.high-contrast select {
-  background-color: #121212 !important;
+  background-color: #000000 !important;
   color: #ffffff !important;
   border: 2px solid #ffffff !important;
 }
 
-/* Botão de filtro selecionado (ex: "Todos") ganha a cor amarela */
-html.high-contrast button[class*="bg-yellow"],
+/* Botões de Categoria (Ex: "Todos") ativos em Amarelo com Letras Pretas */
 html.high-contrast button[aria-checked="true"],
-html.high-contrast button[class*="border-yellow"] {
+html.high-contrast button[class*="bg-yellow"],
+html.high-contrast button.bg-yellow-500 {
   background-color: #facc15 !important;
   color: #000000 !important;
 }
 
-/* 🔐 TELA DE LOGIN (Caso seja visualizada em alto contraste) */
+/* 🔐 COMPATIBILIDADE COM A TELA DE LOGIN */
 html.high-contrast .max-w-md,
 html.high-contrast form {
   background-color: #121212 !important;
@@ -81,11 +94,20 @@ html.high-contrast form {
 html.high-contrast button[type="submit"] {
   background-color: #facc15 !important;
   color: #000000 !important;
+  font-weight: 900 !important;
 }
 
-/* ─── MODO INVERTIDO GLOBAL ─── */
+
+/* ─── 🔄 2️⃣ MODO INVERTIDO GLOBAL ─── */
 html.inverted,
 html.inverted body {
   filter: invert(1) hue-rotate(180deg) !important;
   background-color: #ffffff !important;
+}
+
+
+/* ─── 💙 3️⃣ MODO NORMAL ─── */
+html.normal,
+html.normal body {
+  /* Mantém as cores padrões do Tailwind v4 */
 }
