@@ -38,7 +38,6 @@ function LoginForm({ highContrastMode, onSuccess }: LoginFormProps) {
     emailRef.current?.focus(); 
   }, []);
 
-  // Foca automaticamente no aviso de erro se ele aparecer (Melhoria de Acessibilidade WCAG)
   useEffect(() => {
     if (error) {
       errorRef.current?.focus();
@@ -50,10 +49,8 @@ function LoginForm({ highContrastMode, onSuccess }: LoginFormProps) {
     setError(null);
     setLoading(true);
     
-    // Simula uma resposta de rede rápida
     await new Promise(resolve => setTimeout(resolve, 600));
 
-    // 1. Validações básicas de formato
     if (!email.includes('@')) {
       setError('Por favor, insira um e-mail válido.');
       setLoading(false);
@@ -66,21 +63,41 @@ function LoginForm({ highContrastMode, onSuccess }: LoginFormProps) {
       return;
     }
 
-    // 2. VALIDAÇÃO ESTRITA DE CREDENCIAIS
-    const EMAIL_CORRETO = 'heitorcabrini@gmail.com';
-    const SENHA_CORRETA = '123456'; // 🔒 Defina aqui a senha exata que você quer exigir!
+    // 🔍 BUSCA O USUÁRIO QUE FOI CRIADO NA ABA "CRIAR CONTA"
+    const savedUserJson = localStorage.getItem('registered_user');
+    
+    // Conta padrão caso ninguém tenha se cadastrado ainda
+    const DEFAULT_EMAIL = 'heitorcabrini@gmail.com';
+    const DEFAULT_SENHA = '123';
 
-    if (email.toLowerCase().trim() === EMAIL_CORRETO && password === SENHA_CORRETA) {
+    let emailValido = DEFAULT_EMAIL;
+    let senhaValida = DEFAULT_SENHA;
+    let nomeExibicao = 'heitorr';
+
+    // Se existir um cadastro feito na aba do lado, usa ele!
+    if (savedUserJson) {
+      try {
+        const savedUser = JSON.parse(savedUserJson);
+        emailValido = savedUser.email;
+        senhaValida = savedUser.password;
+        nomeExibicao = savedUser.name || savedUser.email.split('@')[0];
+      } catch (err) {
+        console.error("Erro ao ler usuário do localStorage", err);
+      }
+    }
+
+    // 🔐 COMPARAÇÃO DINÂMICA
+    if (email.toLowerCase().trim() === emailValido.toLowerCase().trim() && password === senhaValida) {
       setLoading(false);
       onSuccess({ 
         id: '1', 
-        email: EMAIL_CORRETO, 
-        name: 'heitorr', 
+        email: emailValido, 
+        name: nomeExibicao, 
         role: 'Professor(a)' 
       });
     } else {
       setLoading(false);
-      setError('E-mail ou senha incorretos. Verifique suas credenciais de acesso.');
+      setError('E-mail ou senha incorretos. Se você acabou de criar uma conta, verifique os dados digitados.');
     }
   };
 
