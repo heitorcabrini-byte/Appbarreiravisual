@@ -1,71 +1,122 @@
 @import "tailwindcss";
 
 /* ==========================================================================
-   🎨 SISTEMA COMPLETO DE ACESSIBILIDADE VISUAL DO MURAL
+   ♿ SISTEMA COMPLETO DE ACESSIBILIDADE VISUAL DO MURAL (WCAG AAA)
    ========================================================================== */
 
-/* ─── 1️⃣ MODO ALTO CONTRASTE ─── */
-body.high-contrast {
+/* ─── 1️⃣ MODO ALTO CONTRASTE (Baixa visão / Astigmatismo) ─── */
+body.high-contrast,
+html.high-contrast {
   background-color: #000000 !important;
   color: #ffffff !important;
 
-  /* Força todos os cards a ficarem pretos com bordas amarelas grossas */
-  & .accessibility-card {
+  /* Força a barra de rolagem a obedecer o tema preto */
+  color-scheme: dark;
+
+  /* Aplica bordas e fundos pretos em TODOS os blocos, containers e elementos de layout */
+  & div, 
+  & main, 
+  & header, 
+  & nav, 
+  & select, 
+  & input {
     background-color: #000000 !important;
     background: #000000 !important;
-    border: 3px solid #facc15 !important;
+    color: #ffffff !important;
+    border-color: #ffffff !important;
     box-shadow: none !important;
   }
 
-  /* Textos internos em branco absoluto para contraste máximo */
-  & .accessibility-title,
-  & .accessibility-text,
-  & .accessibility-meta span,
-  & .accessibility-footer button,
-  & .accessibility-footer span {
+  /* Input de busca ganha borda grossa branca e texto nítido */
+  & input[type="search"] {
+    border: 2px solid #ffffff !important;
     color: #ffffff !important;
   }
+  & input::placeholder {
+    color: #a1a1aa !important; /* Cinza claro de alto contraste */
+  }
 
-  /* Ícones e svg sem preenchimento em branco */
-  & .accessibility-icon,
-  & .accessibility-footer svg:not([fill="#facc15"]) {
+  /* Destaques principais, títulos e botões importantes ganham AMARELO PURO */
+  & h1, 
+  & h2, 
+  & .font-black, 
+  & .font-bold {
+    color: #ffff00 !important;
+  }
+
+  /* Botões de filtro em repouso recebem borda branca nítida */
+  & button {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    border: 2px solid #ffffff !important;
+    border-radius: 8px !important;
+  }
+
+  /* Botão de filtro ativo ou qualquer hover vira amarelo com letra preta (Inversão) */
+  & button[aria-checked="true"],
+  & button:hover {
+    background-color: #ffff00 !important;
+    color: #000000 !important;
+    border-color: #ffff00 !important;
+    
+    /* Garante que textos internos e spans dentro do botão ativo também fiquem pretos */
+    & span {
+      color: #000000 !important;
+    }
+  }
+
+  /* Badges de Categoria (Urgente, Importante, etc) e Tags internas */
+  & span.rounded-md,
+  & span.text-\[11px\] {
+    background-color: #000000 !important;
+    color: #ffffff !important;
+    border: 1px solid #ffffff !important;
+  }
+
+  /* Ícones e SVGs ganham cor branca pura forçada */
+  & svg {
     stroke: #ffffff !important;
     color: #ffffff !important;
+    fill: transparent !important;
   }
 
-  /* Distintivos (badges) superiores e tags em preto com borda amarela */
-  & .accessibility-badge,
-  & .accessibility-tag {
-    background-color: #000000 !important;
-    border: 1px solid #facc15 !important;
-    color: #facc15 !important;
+  /* Links e botões de ação do rodapé ("Ouvir", "Salvar", "Ver aviso") */
+  & button.text-blue-400,
+  & button.text-slate-400 {
+    color: #ffff00 !important;
+    text-decoration: underline !important;
+    border: none !important; /* Remove bordas dos botões internos text-only */
+    background: transparent !important;
   }
-
-  & .accessibility-dot {
-    background-color: #facc15 !important;
+  
+  & button.text-green-400 {
+    color: #22c55e !important; /* Verde puro legível para o botão de áudio ativo */
+    font-weight: 900 !important;
   }
-
-  /* Linha divisória interna do rodapé */
-  & .accessibility-footer {
-    border-top-color: #facc15 !important;
-  }
-
-  /* Botão principal de ação rápida "Ver aviso" em amarelo */
-  & .accessibility-action-btn,
-  & .accessibility-action-btn span,
-  & .accessibility-action-btn svg {
-    color: #facc15 !important;
-    stroke: #facc15 !important;
+  
+  & button.text-yellow-400 {
+    color: #ffff00 !important; /* Amarelo puro fixo para os favoritos salvos */
   }
 }
 
-/* ─── 2️⃣ MODO INVERTIDO ─── */
-body.inverted {
-  filter: invert(1) hue-rotate(180deg);
+/* ─── 2️⃣ MODO INVERTIDO (Fotofobia / Síndrome de Irlen) ─── */
+body.inverted,
+html.inverted {
+  filter: invert(1) hue-rotate(180deg) !important;
   background-color: #ffffff !important;
+
+  /* Força elementos de mídia (como fotos, avatares ou emojis) a voltarem 
+     ao normal para não distorcer o rosto de pessoas ou ícones coloridos */
+  & img,
+  & [role="img"],
+  & span[aria-hidden="true"],
+  & .emoji {
+    filter: invert(1) hue-rotate(180deg) !important;
+  }
 }
 
 /* ─── 3️⃣ MODO NORMAL ─── */
-body.normal {
-  /* Mantém as cores nativas e estilizações padrão que você trouxe do Figma */
+body.normal,
+html.normal {
+  /* Mantém as cores nativas do painel escuro configuradas com as classes do Tailwind */
 }
