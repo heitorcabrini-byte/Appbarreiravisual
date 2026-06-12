@@ -19,13 +19,11 @@ export default function App() {
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState<string>('recente');
 
-  // 📁 Estado Global de Favoritos: Guarda um array com os IDs favoritados
   const [favoritedIds, setFavoritedIds] = useState<string[]>([]);
 
   const minFont = 12;
   const maxFont = 24;
 
-  // ⌨️ Atalhos de teclado globais
   useEffect(() => {
     const handleGlobalKeyDown = (e: KeyboardEvent) => {
       if (e.altKey && e.key === '1') {
@@ -49,7 +47,6 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleGlobalKeyDown);
   }, [contrastMode]);
 
-  // ⚡ Sincronização do modo de acessibilidade visual (REPARADO)
   useEffect(() => {
     const root = document.documentElement;
     const body = document.body;
@@ -81,20 +78,17 @@ export default function App() {
     });
   };
 
-  // ⭐️ Função para Adicionar ou Remover dos favoritos globais
   const toggleFavoriteGlobal = (id: string) => {
     setFavoritedIds(prev => 
       prev.includes(id) ? prev.filter(favId => favId !== id) : [...prev, id]
     );
   };
 
-  // 🔍 Lógica de Filtragem (Categoria + Busca + Regra de Favoritos)
   const filteredAnnouncements = ANNOUNCEMENTS_DATA.filter(item => {
     const categoryStr = item?.category || 'Geral';
     const titleStr = item?.title || '';
     const contentStr = item?.content || '';
 
-    // Se a pessoa escolheu "Meus favoritos" no seletor, filtra por ID salvo
     if (sort === 'favoritos' && !favoritedIds.includes(item.id)) {
       return false;
     }
@@ -107,15 +101,14 @@ export default function App() {
     return matchesFilter && matchesSearch;
   });
 
-  // 🔄 Ordenação Numérica Cronológica
   const sortedAnnouncements = [...filteredAnnouncements].sort((a, b) => {
     const idA = parseInt(a.id, 10);
     const idB = parseInt(b.id, 10);
     
     if (sort === 'antigo') {
-      return idA - idB; // Mais antigo primeiro
+      return idA - idB;
     }
-    return idB - idA; // Mais recente primeiro
+    return idB - idA;
   });
 
   return (
@@ -157,7 +150,7 @@ export default function App() {
                 Mural de Avisos
               </h1>
               <p className="text-sm mt-2 text-slate-400">
-                Acompanhe comunicados, eventos e informações importantes da escola.
+                Acompanhe comunicados, events e informações importantes da escola.
               </p>
             </div>
 
