@@ -129,7 +129,7 @@ export default function App() {
           setCurrentScreen={setCurrentScreen}
         />
       ) : (
-        <div className="min-h-screen">
+        <div className="min-h-screen app-container">
           <Header 
             fontSize={fontSize}
             contrastMode={contrastMode}
@@ -141,21 +141,47 @@ export default function App() {
             setShowKeyboardHelp={setShowKeyboardHelp}
           />
 
+          {/* 🟨 BARRA DE AVISO DE ALTO CONTRASTE DO FIGMA */}
+          {contrastMode === 'high-contrast' && (
+            <div className="high-contrast-alert-bar text-center py-2 text-xs font-bold border-b">
+              ✓ Modo alto contraste ativado — maior visibilidade para baixa visão
+            </div>
+          )}
+
+          {/* 👤 BARRA DE PERFIL DO USUÁRIO LOGADO */}
+          <div className="user-profile-strip max-w-7xl mx-auto px-4 py-3 sm:px-6 lg:px-8 mt-4 flex items-center justify-between border-b border-slate-800">
+            <div className="flex items-center gap-3">
+              <div className="w-10 h-10 rounded-full bg-slate-800 flex items-center justify-center font-bold text-sm border border-slate-700 profile-avatar">
+                HE
+              </div>
+              <div>
+                <p className="text-sm font-bold user-name">heitorr</p>
+                <p className="text-xs text-slate-400 user-email">Professor(a) • heitorcabrini@gmail.com</p>
+              </div>
+            </div>
+            <button 
+              onClick={() => setSession(null)}
+              className="px-4 py-1.5 rounded-lg border border-slate-700 hover:bg-slate-800 transition text-xs flex items-center gap-2 logout-btn"
+            >
+              <span>🚪</span> Sair
+            </button>
+          </div>
+
           <main className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
-            <div className="mb-8">
-              <span className="text-xs font-bold uppercase tracking-widest text-blue-500">
-                Escola Estadual Dom Pedro II
+            <div className="mb-8 main-intro">
+              <span className="text-xs font-bold uppercase tracking-widest text-blue-500 school-tag">
+                ESCOLA ESTADUAL DOM PEDRO II
               </span>
-              <h1 className="text-3xl font-black mt-1 tracking-tight">
+              <h1 className="text-3xl font-black mt-1 tracking-tight main-title">
                 Mural de Avisos
               </h1>
-              <p className="text-sm mt-2 text-slate-400">
-                Acompanhe comunicados, events e informações importantes da escola.
+              <p className="text-sm mt-2 text-slate-400 main-subtitle">
+                Acompanhe comunicados, eventos e informações importantes da escola.
               </p>
             </div>
 
             {showKeyboardHelp && (
-              <div className="mb-6 p-4 rounded-xl border bg-blue-950/20 border-blue-800/30 text-xs text-slate-300">
+              <div className="mb-6 p-4 rounded-xl border bg-blue-950/20 border-blue-800/30 text-xs text-slate-300 help-box">
                 <p className="font-bold text-blue-400 mb-1"> 🏢 Atalhos de acessibilidade:</p>
                 <p>Alt + 1: Aumentar Texto | Alt + 2: Diminuir Texto | Alt + 3: Trocar Contraste | Alt + 4: Fechar guia</p>
               </div>
@@ -173,13 +199,13 @@ export default function App() {
             />
 
             {sortedAnnouncements.length === 0 ? (
-              <div className="text-center py-16 text-sm border border-dashed border-slate-800 rounded-2xl mt-8">
+              <div className="text-center py-16 text-sm border border-dashed border-slate-800 rounded-2xl mt-8 empty-state">
                 {sort === 'favoritos' 
                   ? "Você ainda não favoritou nenhum aviso." 
                   : "Nenhum aviso encontrado para os filtros selecionados."}
               </div>
             ) : (
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 items-start">
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 items-start announcements-grid">
                 {sortedAnnouncements.map((announcement) => (
                   <AnnouncementCard 
                     key={announcement.id} 
