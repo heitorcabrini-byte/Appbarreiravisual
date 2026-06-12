@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
 /* ==========================================================================
-   ♿ DIRETRIZES FIÉIS AO FIGMA — ALTO CONTRASTE & INVERSÃO (TAILWIND v4)
+   ♿ ACESSIBILIDADE TOTAL — ALINHADO FIELMENTE AO DESIGN DO FIGMA
    ========================================================================== */
 
-/* ─── 1️⃣ MODO ALTO CONTRASTE (IGUAL AO FIGMA) ─── */
+/* ─── MODO ALTO CONTRASTE (Fundo Preto, Topo Amarelo) ─── */
 html.high-contrast,
 html.high-contrast body,
 body.high-contrast {
@@ -14,85 +14,74 @@ body.high-contrast {
   color-scheme: dark !important;
 }
 
-/* Força o container principal a remover o fundo azul padrão do Figma normal */
-body.high-contrast div[class*="bg-[#060b13]"],
-body.high-contrast div[class*="min-h-screen"] {
-  background-color: #000000 !important;
-  background: #000000 !important;
+/* Força a remoção de fundos padrão em todas as estruturas de bloco */
+body.high-contrast div,
+body.high-contrast main,
+body.high-contrast section {
+  background-color: transparent;
 }
 
-/* 🟨 BARRA SUPERIOR (HEADER): Fundo Amarelo com Textos/Ícones Pretos */
+/* 🟨 CABEÇALHO (HEADER): Fundo amarelo ouro com letras e ícones pretos */
 body.high-contrast header,
-body.high-contrast nav,
-body.high-contrast .bg-slate-900,
-body.high-contrast div[class*="bg-"] {
-  /* Alvos de cabeçalhos e caixas superiores */
+body.high-contrast header nav,
+body.high-contrast div[class*="bg-slate-900"] {
+  background-color: #facc15 !important;
+  background: #facc15 !important;
+  border-bottom: 2px solid #000000 !important;
 }
 
-/* Seletor específico para o Header superior ficar amarelo puro */
-body.high-contrast header, 
-body.high-contrast header * {
-  background-color: #facc15 !important;
+body.high-contrast header *,
+body.high-contrast header button,
+body.high-contrast header span,
+body.high-contrast header h2 {
   color: #000000 !important;
   border-color: #000000 !important;
 }
 
-/* Ajuste dos ícones do Header para que apareçam pretos no fundo amarelo */
 body.high-contrast header svg,
 body.high-contrast header svg * {
   stroke: #000000 !important;
-  color: #000000 !important;
+  fill: transparent !important;
 }
 
-/* 📋 CARDS DE AVISO: Fundo marrom/cinza ultra escuro e bordas nítidas */
-body.high-contrast main div[class*="bg-"],
-body.high-contrast .grid > div {
-  background-color: #120c08 !important; /* Tom escuro de contraste dos cards do Figma */
-  border: 2px solid #854d0e !important;   /* Borda bem definida */
+/* 📋 CARDS DO MURAL: Fundo marrom/cinza ultra escuro e contornos definidos */
+body.high-contrast main .grid > div,
+body.high-contrast div[class*="bg-"] {
+  background-color: #120c08 !important;
+  border: 2px solid #854d0e !important;
+  border-radius: 0.75rem !important;
   box-shadow: none !important;
 }
 
-/* Todos os textos internos dos cards e do corpo principal viram branco puro */
+/* Garante o texto em branco puro com legibilidade máxima no corpo */
 body.high-contrast main *,
 body.high-contrast main p,
 body.high-contrast main span,
+body.high-contrast main h1,
 body.high-contrast main time {
   color: #ffffff !important;
 }
 
-/* Títulos do mural e dos cards ganham peso extra */
-body.high-contrast h1,
-body.high-contrast h2,
-body.high-contrast h3,
-body.high-contrast strong {
-  color: #ffffff !important;
-  font-weight: 900 !important;
-}
-
-/* 🔍 INTERFACE DE BUSCA E FILTROS */
-body.high-contrast input[type="search"],
+/* 🔍 ÁREA DE BUSCA, BOTÕES E FILTROS */
+body.high-contrast input,
 body.high-contrast select {
-  background-color: #1a1a1a !important;
+  background-color: #000000 !important;
   color: #ffffff !important;
   border: 2px solid #ffffff !important;
 }
 
-/* Botão "Todos" ativo em amarelo vibrante */
-body.high-contrast button[class*="bg-yellow"],
-body.high-contrast button[aria-checked="true"] {
+/* Botão selecionado ou com estado ativo ganha preenchimento amarelo */
+body.high-contrast button[aria-checked="true"],
+body.high-contrast button.bg-yellow-500 {
   background-color: #facc15 !important;
   color: #000000 !important;
 }
 
-/* 🔐 TELA DE LOGIN: Força os inputs e o card central a alinharem com o Figma */
-body.high-contrast div.max-w-md,
+/* 🔐 TELA DE LOGIN */
+body.high-contrast .max-w-md,
 body.high-contrast form {
   background-color: #121212 !important;
   border: 3px solid #facc15 !important;
-}
-
-body.high-contrast div.max-w-md * {
-  color: #ffffff !important;
 }
 
 body.high-contrast button[type="submit"] {
@@ -102,9 +91,8 @@ body.high-contrast button[type="submit"] {
 }
 
 
-/* ─── 2️⃣ MODO INVERTIDO GLOBAL ─── */
+/* ─── MODO INVERTIDO GLOBAL ─── */
 html.inverted,
-html.inverted body,
 body.inverted {
   filter: invert(1) hue-rotate(180deg) !important;
   background-color: #ffffff !important;
@@ -112,14 +100,13 @@ body.inverted {
 
 body.inverted img,
 body.inverted [role="img"],
-body.inverted span[aria-hidden="true"],
 body.inverted .emoji {
   filter: invert(1) hue-rotate(180deg) !important;
 }
 
 
-/* ─── 3️⃣ MODO NORMAL ─── */
+/* ─── MODO NORMAL ─── */
 html.normal,
 body.normal {
-  /* Mantém o padrão escuro original */
+  /* Respeita as classes nativas do Tailwind */
 }
