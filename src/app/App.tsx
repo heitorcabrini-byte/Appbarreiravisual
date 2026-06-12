@@ -49,7 +49,7 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleGlobalKeyDown);
   }, [contrastMode]);
 
-  // ⚡ Sincronização do modo de acessibilidade visual
+  // ⚡ Sincronização do modo de acessibilidade visual (REPARADO)
   useEffect(() => {
     const root = document.documentElement;
     const body = document.body;
@@ -61,4 +61,145 @@ export default function App() {
     if (contrastMode === 'high-contrast') {
       root.classList.add('high-contrast');
       body.classList.add('high-contrast');
-    } else if (contrastMode ===
+    } else if (contrastMode === 'inverted') {
+      root.classList.add('inverted');
+      body.classList.add('inverted');
+    } else {
+      root.classList.add('normal');
+      body.classList.add('normal');
+    }
+  }, [fontSize, contrastMode]);
+
+  const handleFontIncrease = () => setFontSize(f => Math.min(f + 2, maxFont));
+  const handleFontDecrease = () => setFontSize(f => Math.max(f - 2, minFont));
+  
+  const cycleContrast = () => {
+    setContrastMode(prev => {
+      if (prev === 'normal') return 'high-contrast';
+      if (prev === 'high-contrast') return 'inverted';
+      return 'normal';
+    });
+  };
+
+  // ⭐️ Função para Adicionar ou Remover dos favoritos globais
+  const toggleFavoriteGlobal = (id: string) => {
+    setFavoritedIds(prev => 
+      prev.includes(id) ? prev.filter(favId => favId !== id) : [...prev, id]
+    );
+  };
+
+  // 🔍 Lógica de Filtragem (Categoria + Busca + Regra de Favoritos)
+  const filteredAnnouncements = ANNOUNCEMENTS_DATA.filter(item => {
+    const categoryStr = item?.category || 'Geral';
+    const titleStr = item?.title || '';
+    const contentStr = item?.content || '';
+
+    // Se a pessoa escolheu "Meus favoritos" no seletor, filtra por ID salvo
+    if (sort === 'favoritos' && !favoritedIds.includes(item.id)) {
+      return false;
+    }
+
+    const matchesFilter = filter === 'todos' || categoryStr.toLowerCase() === filter.toLowerCase();
+    const matchesSearch = 
+      titleStr.toLowerCase().includes(search.toLowerCase()) ||
+      contentStr.toLowerCase().includes(search.toLowerCase());
+      
+    return matchesFilter && matchesSearch;
+  });
+
+  // 🔄 Ordenação Numérica Cronológica
+  const sortedAnnouncements = [...filteredAnnouncements].sort((a, b) => {
+    const idA = parseInt(a.id, 10);
+    const idB = parseInt(b.id, 10);
+    
+    if (sort === 'antigo') {
+      return idA - idB; // Mais antigo primeiro
+    }
+    return idB - idA; // Mais recente primeiro
+  });
+
+  return (
+    <div className={`min-h-screen antialiased transition-colors duration-200 ${
+      contrastMode === 'normal' ? 'bg-[#060b13] text-white' : ''
+    }`}>
+      {!session ? (
+        <LoginScreen
+          fontSize={fontSize}
+          contrastMode={contrastMode}
+          showKeyboardHelp={showKeyboardHelp}
+          setShowKeyboardHelp={setShowKeyboardHelp}
+          onFontIncrease={handleFontIncrease}
+          onFontDecrease={handleFontDecrease}
+          onCycleContrast={cycleContrast}
+          onLoginSuccess={(userSession) => setSession(userSession)}
+          currentScreen={currentScreen}
+          setCurrentScreen={setCurrentScreen}
+        />
+      ) : (
+        <div className="min-h-screen">
+          <Header 
+            fontSize={fontSize}
+            contrastMode={contrastMode}
+            onFontIncrease={handleFontIncrease}
+            onFontDecrease={handleFontDecrease}
+            onCycleContrast={cycleContrast}
+            onLogout={() => setSession(null)}
+            showKeyboardHelp={showKeyboardHelp}
+            setShowKeyboardHelp={setShowKeyboardHelp}
+          />
+
+          <main className="max-w-7xl mx-auto px-4 py-8 sm:px-6 lg:px-8">
+            <div className="mb-8">
+              <span className="text-xs font-bold uppercase tracking-widest text-blue-500">
+                Escola Estadual Dom Pedro II
+              </span>
+              <h1 className="text-3xl font-black mt-1 tracking-tight">
+                Mural de Avisos
+              </h1>
+              <p className="text-sm mt-2 text-slate-400">
+                Acompanhe comunicados, eventos e informações importantes da escola.
+              </p>
+            </div>
+
+            {showKeyboardHelp && (
+              <div className="mb-6 p-4 rounded-xl border bg-blue-950/20 border-blue-800/30 text-xs text-slate-300">
+                <p className="font-bold text-blue-400 mb-1"> 🏢 Atalhos de acessibilidade:</p>
+                <p>Alt + 1: Aumentar Texto | Alt + 2: Diminuir Texto | Alt + 3: Trocar Contraste | Alt + 4: Fechar guia</p>
+              </div>
+            )}
+
+            <FilterSearchBar 
+              filter={filter}
+              search={search}
+              sort={sort}
+              resultCount={sortedAnnouncements.length}
+              onFilterChange={setFilter}
+              onSearchChange={setSearch}
+              onSortChange={setSort}
+              highContrast={contrastMode === 'high-contrast'}
+            />
+
+            {sortedAnnouncements.length === 0 ? (
+              <div className="text-center py-16 text-sm border border-dashed border-slate-800 rounded-2xl mt-8">
+                {sort === 'favoritos' 
+                  ? "Você ainda não favoritou nenhum aviso." 
+                  : "Nenhum aviso encontrado para os filtros selecionados."}
+              </div>
+            ) : (
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 items-start">
+                {sortedAnnouncements.map((announcement) => (
+                  <AnnouncementCard 
+                    key={announcement.id} 
+                    announcement={announcement} 
+                    isFavorited={favoritedIds.includes(announcement.id)}
+                    onToggleFavorite={() => toggleFavoriteGlobal(announcement.id)}
+                  />
+                ))}
+              </div>
+            )}
+          </main>
+        </div>
+      )}
+    </div>
+  );
+}
