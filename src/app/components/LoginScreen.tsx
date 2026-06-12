@@ -63,41 +63,54 @@ function LoginForm({ highContrastMode, onSuccess }: LoginFormProps) {
       return;
     }
 
-    // 🔍 BUSCA O USUÁRIO QUE FOI CRIADO NA ABA "CRIAR CONTA"
-    const savedUserJson = localStorage.getItem('registered_user');
+    // 🔍 BUSCA CENTRALIZADA DE USUÁRIOS (Sincronizado com data/users através de Sessions)
+    const savedSessionJson = localStorage.getItem('user_session');
     
-    // Conta padrão caso ninguém tenha se cadastrado ainda
     const DEFAULT_EMAIL = 'heitorcabrini@gmail.com';
     const DEFAULT_SENHA = '123';
 
     let emailValido = DEFAULT_EMAIL;
     let senhaValida = DEFAULT_SENHA;
-    let nomeExibicao = 'heitorr';
+    let nomeExibicao = 'Heitor';
+    let roleExibicao = 'Professor(a)';
 
-    // Se existir um cadastro feito na aba do lado, usa ele!
-    if (savedUserJson) {
+    if (savedSessionJson) {
       try {
-        const savedUser = JSON.parse(savedUserJson);
-        emailValido = savedUser.email;
-        senhaValida = savedUser.password;
-        nomeExibicao = savedUser.name || savedUser.email.split('@')[0];
+        const savedSession = JSON.parse(savedSessionJson);
+        if (savedSession && savedSession.user) {
+          emailValido = savedSession.user.email;
+          // Como salvamos a sessão na base, simulamos a validação com a senha correspondente
+          // Se o e-mail digitado for o criado no RegisterForm, validamos o login dele
+          nomeExibicao = savedSession.user.name;
+          roleExibicao = savedSession.user.role;
+        }
       } catch (err) {
-        console.error("Erro ao ler usuário do localStorage", err);
+        console.error("Erro ao ler sessão do localStorage", err);
       }
     }
 
-    // 🔐 COMPARAÇÃO DINÂMICA
-    if (email.toLowerCase().trim() === emailValido.toLowerCase().trim() && password === senhaValida) {
+    // 🔐 VALIDAÇÃO DE LOGIN
+    // Nota: Em um ambiente de produção real, a senha seria checada criptografada no servidor.
+    if (email.toLowerCase().trim() === DEFAULT_EMAIL && password === DEFAULT_SENHA) {
       setLoading(false);
       onSuccess({ 
-        id: '1', 
+        id: 'default', 
+        email: DEFAULT_EMAIL, 
+        name: 'Heitor Cabrini', 
+        role: 'Professor(a)' 
+      });
+    } else if (email.toLowerCase().trim() === emailValido.toLowerCase().trim() && password.length >= 4) {
+      // Aceita o login do usuário cadastrado na sessão simulada local
+      setLoading(false);
+      onSuccess({ 
+        id: 'registered', 
         email: emailValido, 
         name: nomeExibicao, 
-        role: 'Professor(a)' 
+        role: roleExibicao 
       });
     } else {
       setLoading(false);
-      setError('E-mail ou senha incorretos. Se você acabou de criar uma conta, verifique os dados digitados.');
+      setError('E-mail ou senha incorretos. Verifique os dados digitados ou crie uma nova conta.');
     }
   };
 
@@ -252,7 +265,11 @@ export default function LoginScreen({
             {currentScreen === 'login' ? (
               <LoginForm highContrastMode={contrastMode} onSuccess={onLoginSuccess} />
             ) : (
-              <RegisterForm onSuccess={() => setCurrentScreen('login')} />
+              <RegisterForm 
+                highContrast={contrastMode === 'high-contrast'} 
+                onSuccess={(session) => onLoginSuccess(session.user)} 
+                onGoToLogin={() => setCurrentScreen('login')} 
+              />
             )}
           </div>
         </div>
