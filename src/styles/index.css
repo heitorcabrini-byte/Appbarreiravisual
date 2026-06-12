@@ -1,120 +1,91 @@
 @import "tailwindcss";
 
 /* ==========================================================================
-   ♿ ACESSIBILIDADE TOTAL COMPATÍVEL COM TAILWIND V4 (ESTILO FIGMA)
+   ♿ SOBREPOSIÇÃO FORÇADA DE ALTO CONTRASTE (ALINHADO AO FIGMA)
    ========================================================================== */
 
-/* ─── 🟨 1️⃣ MODO ALTO CONTRASTE ─── */
+/* Se o alto contraste estiver ativo, força TODA a estrutura de fundo a ser preta */
 html.high-contrast,
 html.high-contrast body,
-body.high-contrast {
+html.high-contrast #root,
+html.high-contrast div,
+html.high-contrast main {
   background-color: #000000 !important;
-  background: #000000 !important;
-  color: #ffffff !important;
-  color-scheme: dark !important;
-}
-
-/* Força o container mestre a abandonar o fundo azul escuro do Tailwind */
-body.high-contrast div,
-body.high-contrast main,
-body.high-contrast section {
-  background-color: transparent !important;
-}
-
-/* 🧱 CORREÇÃO DOS CARDS DO MURAL: Fundo marrom/cinza ultra escuro e contornos nítidos */
-body.high-contrast main .grid > div,
-body.high-contrast [class*="bg-slate-900"],
-body.high-contrast [class*="bg-gray-"],
-body.high-contrast [class*="bg-[#1e293b]"] {
-  background-color: #120c08 !important; /* Tom do Figma */
-  border: 3px solid #854d0e !important;   /* Contorno de destaque */
-  box-shadow: none !important;
-}
-
-/* Garante o texto em branco puro com legibilidade máxima no corpo */
-body.high-contrast main *,
-body.high-contrast main p,
-body.high-contrast main span,
-body.high-contrast main h1,
-body.high-contrast main h2,
-body.high-contrast main time {
   color: #ffffff !important;
 }
 
-/* 👑 CABEÇALHO SUPERIOR (HEADER): Inverte para fundo amarelo ouro e letras pretas */
-body.high-contrast header,
-body.high-contrast header nav,
-body.high-contrast [role="banner"],
-body.high-contrast .min-h-screen > div:first-child {
+/* 👑 BARRA SUPERIOR (HEADER): Fundo Amarelo Ouro e elementos em Preto */
+html.high-contrast header,
+html.high-contrast header *,
+html.high-contrast nav,
+html.high-contrast nav *,
+html.high-contrast div[class*="bg-slate-900"],
+html.high-contrast div[class*="bg-slate-900"] * {
   background-color: #facc15 !important;
-  background: #facc15 !important;
-  border-bottom: 3px solid #000000 !important;
-}
-
-/* Transforma todas as letras e elementos de dentro do Header em preto puro */
-body.high-contrast header *,
-body.high-contrast header button,
-body.high-contrast header span,
-body.high-contrast header h2,
-body.high-contrast header div {
   color: #000000 !important;
   border-color: #000000 !important;
 }
 
-/* Garante que os ícones do Header fiquem pretos */
-body.high-contrast header svg,
-body.high-contrast header svg * {
+/* Força os ícones SVG dentro do cabeçalho a ficarem pretos */
+html.high-contrast header svg,
+html.high-contrast header svg *,
+html.high-contrast nav svg,
+html.high-contrast nav svg * {
   stroke: #000000 !important;
   color: #000000 !important;
   fill: transparent !important;
 }
 
-/* 🔍 INTERFACE DE BUSCA, BOTÕES E FILTROS */
-body.high-contrast input,
-body.high-contrast select,
-body.high-contrast input[type="search"] {
-  background-color: #000000 !important;
+/* 📋 CARDS DE AVISO: Fundo escuro avermelhado/marrom com bordas douradas */
+html.high-contrast main .grid > div,
+html.high-contrast main div[class*="bg-"],
+html.high-contrast article {
+  background-color: #120c08 !important; /* Tom idêntico ao do Figma */
+  border: 2px solid #854d0e !important;  /* Borda nítida */
+  box-shadow: none !important;
+}
+
+/* Força todos os textos dentro do conteúdo principal a serem branco puro */
+html.high-contrast main *,
+html.high-contrast main h1,
+html.high-contrast main h2,
+html.high-contrast main p,
+html.high-contrast main span,
+html.high-contrast main time {
+  color: #ffffff !important;
+}
+
+/* 🔍 CAIXA DE BUSCA E SELECTS */
+html.high-contrast input,
+html.high-contrast input[type="search"],
+html.high-contrast select {
+  background-color: #121212 !important;
   color: #ffffff !important;
   border: 2px solid #ffffff !important;
 }
 
-/* Mantém o botão "Todos" ou filtros ativos com preenchimento amarelo */
-body.high-contrast button[aria-checked="true"],
-body.high-contrast button[class*="bg-yellow-"] {
+/* Botão de filtro selecionado (ex: "Todos") ganha a cor amarela */
+html.high-contrast button[class*="bg-yellow"],
+html.high-contrast button[aria-checked="true"],
+html.high-contrast button[class*="border-yellow"] {
   background-color: #facc15 !important;
   color: #000000 !important;
 }
 
-/* 🔐 TELA DE LOGIN: Quadro centralizado escuro com borda amarela */
-body.high-contrast .max-w-md,
-body.high-contrast form {
+/* 🔐 TELA DE LOGIN (Caso seja visualizada em alto contraste) */
+html.high-contrast .max-w-md,
+html.high-contrast form {
   background-color: #121212 !important;
   border: 3px solid #facc15 !important;
 }
-
-body.high-contrast button[type="submit"] {
+html.high-contrast button[type="submit"] {
   background-color: #facc15 !important;
   color: #000000 !important;
-  font-weight: 900 !important;
 }
 
-
-/* ─── 🔄 2️⃣ MODO INVERTIDO GLOBAL ─── */
+/* ─── MODO INVERTIDO GLOBAL ─── */
 html.inverted,
-body.inverted {
+html.inverted body {
   filter: invert(1) hue-rotate(180deg) !important;
   background-color: #ffffff !important;
-}
-
-body.inverted img,
-body.inverted [role="img"],
-body.inverted .emoji {
-  filter: invert(1) hue-rotate(180deg) !important;
-}
-
-
-/* ─── 💙 3️⃣ MODO NORMAL ─── */
-html.normal,
-body.normal {
-  /* Mantém as cores originais intactas */
 }
