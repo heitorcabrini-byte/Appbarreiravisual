@@ -13,16 +13,15 @@ interface Announcement {
 
 interface AnnouncementCardProps {
   announcement: Announcement;
+  isFavorited: boolean;          // Recebe o estado real do App.tsx
+  onToggleFavorite: () => void;  // Recebe a função de clique do App.tsx
 }
 
-export function AnnouncementCard({ announcement }: AnnouncementCardProps) {
+export function AnnouncementCard({ announcement, isFavorited, onToggleFavorite }: AnnouncementCardProps) {
   const [isExpanded, setIsExpanded] = useState(false);
   const [isSpeaking, setIsSpeaking] = useState(false);
-  
-  // 🔄 SOLUÇÃO DO FAVORITO: Estado dinâmico que começa como "falso" (desativado)
-  const [isFavorited, setIsFavorited] = useState(false);
 
-  // Garante que o áudio pare se o componente sumir da tela de repente
+  // Desliga a voz automaticamente se mudar de página ou deslogar
   useEffect(() => {
     return () => {
       if ('speechSynthesis' in window) {
@@ -31,9 +30,9 @@ export function AnnouncementCard({ announcement }: AnnouncementCardProps) {
     };
   }, []);
 
-  // 🔊 FUNÇÃO DE ÁUDIO REFORÇADA (Zera filas presas no navegador)
+  // 🔊 Função Reforçada de Leitura do Navegador (Corrige travamentos locais)
   const handleListen = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Evita conflito com o clique de expandir o card
+    e.stopPropagation();
 
     if (!('speechSynthesis' in window)) {
       alert("Seu navegador não suporta leitura em voz alta.");
@@ -46,29 +45,20 @@ export function AnnouncementCard({ announcement }: AnnouncementCardProps) {
       return;
     }
 
-    // Mata qualquer áudio fantasma que tenha ficado travado antes
+    // Limpa qualquer fila pendente no motor de áudio
     window.speechSynthesis.cancel();
 
-    const textToRead = `Aviso da categoria ${announcement.category}. Título: ${announcement.title}. Conteúdo: ${announcement.content}`;
+    const textToRead = `Aviso ${announcement.category}. Título: ${announcement.title}. Conteúdo: ${announcement.content}`;
     const utterance = new SpeechSynthesisUtterance(textToRead);
     
     utterance.lang = 'pt-BR';
-    utterance.rate = 1.0; // Velocidade padrão totalmente limpa
+    utterance.rate = 1.0;
 
     utterance.onstart = () => setIsSpeaking(true);
     utterance.onend = () => setIsSpeaking(false);
-    utterance.onerror = (event) => {
-      console.error("Erro na leitura:", event);
-      setIsSpeaking(false);
-    };
+    utterance.onerror = () => setIsSpeaking(false);
 
     window.speechSynthesis.speak(utterance);
-  };
-
-  // ⭐ FUNÇÃO PARA ALTERNAR O FAVORITO
-  const handleToggleFavorite = (e: React.MouseEvent) => {
-    e.stopPropagation(); // Evita expandir o card ao favoritar
-    setIsFavorited(!isFavorited);
   };
 
   const getCategoryStyles = (category: string) => {
@@ -95,29 +85,21 @@ export function AnnouncementCard({ announcement }: AnnouncementCardProps) {
       }`}
     >
       <div>
-        {/* Topo do Card */}
         <div className="flex items-center justify-between mb-3 text-xs">
           <span className={`px-2.5 py-1 rounded-md font-bold uppercase tracking-wider ${styles.bg} ${styles.text}`}>
             {announcement.emoji} {announcement.category}
           </span>
-          <span className="text-slate-400 font-medium">
-            {announcement.date}
-          </span>
+          <span className="text-slate-400 font-medium">{announcement.date}</span>
         </div>
 
-        {/* Título */}
         <h2 className="text-lg font-bold text-white tracking-tight leading-snug">
           {announcement.title}
         </h2>
 
-        {/* Conteúdo com contraste correto */}
-        <p className={`mt-3 text-sm text-slate-200 leading-relaxed font-normal ${
-          isExpanded ? '' : 'line-clamp-3'
-        }`}>
+        <p className={`mt-3 text-sm text-slate-200 leading-relaxed font-normal ${isExpanded ? '' : 'line-clamp-3'}`}>
           {announcement.content}
         </p>
 
-        {/* Detalhes extras ao expandir */}
         {isExpanded && (
           <div className="mt-5 pt-4 border-t border-slate-800/60 transition-all duration-200">
             {announcement.author && (
@@ -126,14 +108,10 @@ export function AnnouncementCard({ announcement }: AnnouncementCardProps) {
                 <span className="text-slate-300 font-semibold">{announcement.author}</span>
               </p>
             )}
-            
             {announcement.tags && announcement.tags.length > 0 && (
               <div className="flex flex-wrap gap-1.5 mt-2">
                 {announcement.tags.map((tag, idx) => (
-                  <span 
-                    key={idx} 
-                    className="text-[11px] font-medium bg-slate-900 text-slate-400 px-2 py-0.5 rounded-md border border-slate-800/40"
-                  >
+                  <span key={idx} className="text-[11px] font-medium bg-slate-900 text-slate-400 px-2 py-0.5 rounded-md border border-slate-800/40">
                     #{tag}
                   </span>
                 ))}
@@ -143,11 +121,8 @@ export function AnnouncementCard({ announcement }: AnnouncementCardProps) {
         )}
       </div>
 
-      {/* Rodapé de Ações */}
       <div className="mt-5 pt-3 border-t border-slate-800/40 flex items-center justify-between">
         <div className="flex gap-4 text-xs font-medium">
-          
-          {/* 🔊 Botão de Áudio com Corretor de Filas */}
           <button 
             onClick={handleListen}
             className={`transition-colors flex items-center gap-1 font-semibold p-1 rounded cursor-pointer ${
@@ -157,9 +132,8 @@ export function AnnouncementCard({ announcement }: AnnouncementCardProps) {
             {isSpeaking ? '🛑 Parar' : '🔊 Ouvir'}
           </button>
 
-          {/* ⭐ Botão de Favorito Dinâmico Corrigido */}
           <button 
-            onClick={handleToggleFavorite}
+            onClick={(e) => { e.stopPropagation(); onToggleFavorite(); }}
             className={`transition-colors flex items-center gap-1 font-semibold p-1 rounded cursor-pointer ${
               isFavorited ? 'text-yellow-400 hover:text-yellow-300' : 'text-slate-400 hover:text-white'
             }`}
@@ -168,16 +142,11 @@ export function AnnouncementCard({ announcement }: AnnouncementCardProps) {
           </button>
         </div>
 
-        {/* Expandir / Recolher */}
         <button
           onClick={() => setIsExpanded(!isExpanded)}
           className="text-sm font-bold text-blue-400 hover:text-blue-300 transition-colors flex items-center gap-1 cursor-pointer"
         >
-          {isExpanded ? (
-            <>Voltar ao normal ↩️</>
-          ) : (
-            <>Ver aviso <span>❯</span></>
-          )}
+          {isExpanded ? <>Voltar ao normal ↩️</> : <>Ver aviso <span>❯</span></>}
         </button>
       </div>
     </div>
