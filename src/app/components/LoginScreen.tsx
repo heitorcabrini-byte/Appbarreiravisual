@@ -38,6 +38,13 @@ function LoginForm({ highContrastMode, onSuccess }: LoginFormProps) {
     emailRef.current?.focus(); 
   }, []);
 
+  // Foca automaticamente no aviso de erro se ele aparecer (Melhoria de Acessibilidade WCAG)
+  useEffect(() => {
+    if (error) {
+      errorRef.current?.focus();
+    }
+  }, [error]);
+
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
     setError(null);
@@ -46,7 +53,7 @@ function LoginForm({ highContrastMode, onSuccess }: LoginFormProps) {
     // Simula uma resposta de rede rápida
     await new Promise(resolve => setTimeout(resolve, 600));
 
-    // Validação básica local para o sistema funcionar
+    // 1. Validações básicas de formato
     if (!email.includes('@')) {
       setError('Por favor, insira um e-mail válido.');
       setLoading(false);
@@ -58,10 +65,23 @@ function LoginForm({ highContrastMode, onSuccess }: LoginFormProps) {
       setLoading(false);
       return;
     }
-    
-    // Sucesso automático! Aceita qualquer login para liberar o build e o teste
-    setLoading(false);
-    onSuccess({ id: '1', email, name: email.split('@')[0], role: 'user' });
+
+    // 2. VALIDAÇÃO ESTRITA DE CREDENCIAIS
+    const EMAIL_CORRETO = 'heitorcabrini@gmail.com';
+    const SENHA_CORRETA = '123456'; // 🔒 Defina aqui a senha exata que você quer exigir!
+
+    if (email.toLowerCase().trim() === EMAIL_CORRETO && password === SENHA_CORRETA) {
+      setLoading(false);
+      onSuccess({ 
+        id: '1', 
+        email: EMAIL_CORRETO, 
+        name: 'heitorr', 
+        role: 'Professor(a)' 
+      });
+    } else {
+      setLoading(false);
+      setError('E-mail ou senha incorretos. Verifique suas credenciais de acesso.');
+    }
   };
 
   const field = cn(
@@ -93,7 +113,7 @@ function LoginForm({ highContrastMode, onSuccess }: LoginFormProps) {
       <AnimatePresence>
         {error && (
           <motion.div initial={{ opacity: 0, height: 0 }} animate={{ opacity: 1, height: 'auto' }} exit={{ opacity: 0, height: 0 }} className="mb-4">
-            <div ref={errorRef} role="alert" tabIndex={-1} className="flex items-start gap-3 rounded-xl border p-4 border-red-900/50 bg-red-950/20 text-red-400">
+            <div ref={errorRef} role="alert" tabIndex={-1} className="flex items-start gap-3 rounded-xl border p-4 border-red-900/50 bg-red-950/20 text-red-400 focus:outline-none focus:ring-1 focus:ring-red-500">
               <AlertCircle size={20} className="mt-0.5 shrink-0" />
               <div>
                 <p className="font-bold text-sm">Erro ao entrar</p>
