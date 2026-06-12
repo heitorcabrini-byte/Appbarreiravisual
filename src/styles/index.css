@@ -1,10 +1,10 @@
 @import "tailwindcss";
 
 /* ==========================================================================
-   ♿ ACESSIBILIDADE TOTAL — ALINHADO FIELMENTE AO DESIGN DO FIGMA
+   ♿ ACESSIBILIDADE TOTAL COMPATÍVEL COM TAILWIND V4 (ESTILO FIGMA)
    ========================================================================== */
 
-/* ─── MODO ALTO CONTRASTE (Fundo Preto, Topo Amarelo) ─── */
+/* ─── 🟨 1️⃣ MODO ALTO CONTRASTE ─── */
 html.high-contrast,
 html.high-contrast body,
 body.high-contrast {
@@ -14,42 +14,20 @@ body.high-contrast {
   color-scheme: dark !important;
 }
 
-/* Força a remoção de fundos padrão em todas as estruturas de bloco */
+/* Força o container mestre a abandonar o fundo azul escuro do Tailwind */
 body.high-contrast div,
 body.high-contrast main,
 body.high-contrast section {
-  background-color: transparent;
+  background-color: transparent !important;
 }
 
-/* 🟨 CABEÇALHO (HEADER): Fundo amarelo ouro com letras e ícones pretos */
-body.high-contrast header,
-body.high-contrast header nav,
-body.high-contrast div[class*="bg-slate-900"] {
-  background-color: #facc15 !important;
-  background: #facc15 !important;
-  border-bottom: 2px solid #000000 !important;
-}
-
-body.high-contrast header *,
-body.high-contrast header button,
-body.high-contrast header span,
-body.high-contrast header h2 {
-  color: #000000 !important;
-  border-color: #000000 !important;
-}
-
-body.high-contrast header svg,
-body.high-contrast header svg * {
-  stroke: #000000 !important;
-  fill: transparent !important;
-}
-
-/* 📋 CARDS DO MURAL: Fundo marrom/cinza ultra escuro e contornos definidos */
+/* 🧱 CORREÇÃO DOS CARDS DO MURAL: Fundo marrom/cinza ultra escuro e contornos nítidos */
 body.high-contrast main .grid > div,
-body.high-contrast div[class*="bg-"] {
-  background-color: #120c08 !important;
-  border: 2px solid #854d0e !important;
-  border-radius: 0.75rem !important;
+body.high-contrast [class*="bg-slate-900"],
+body.high-contrast [class*="bg-gray-"],
+body.high-contrast [class*="bg-[#1e293b]"] {
+  background-color: #120c08 !important; /* Tom do Figma */
+  border: 3px solid #854d0e !important;   /* Contorno de destaque */
   box-shadow: none !important;
 }
 
@@ -58,26 +36,56 @@ body.high-contrast main *,
 body.high-contrast main p,
 body.high-contrast main span,
 body.high-contrast main h1,
+body.high-contrast main h2,
 body.high-contrast main time {
   color: #ffffff !important;
 }
 
-/* 🔍 ÁREA DE BUSCA, BOTÕES E FILTROS */
+/* 👑 CABEÇALHO SUPERIOR (HEADER): Inverte para fundo amarelo ouro e letras pretas */
+body.high-contrast header,
+body.high-contrast header nav,
+body.high-contrast [role="banner"],
+body.high-contrast .min-h-screen > div:first-child {
+  background-color: #facc15 !important;
+  background: #facc15 !important;
+  border-bottom: 3px solid #000000 !important;
+}
+
+/* Transforma todas as letras e elementos de dentro do Header em preto puro */
+body.high-contrast header *,
+body.high-contrast header button,
+body.high-contrast header span,
+body.high-contrast header h2,
+body.high-contrast header div {
+  color: #000000 !important;
+  border-color: #000000 !important;
+}
+
+/* Garante que os ícones do Header fiquem pretos */
+body.high-contrast header svg,
+body.high-contrast header svg * {
+  stroke: #000000 !important;
+  color: #000000 !important;
+  fill: transparent !important;
+}
+
+/* 🔍 INTERFACE DE BUSCA, BOTÕES E FILTROS */
 body.high-contrast input,
-body.high-contrast select {
+body.high-contrast select,
+body.high-contrast input[type="search"] {
   background-color: #000000 !important;
   color: #ffffff !important;
   border: 2px solid #ffffff !important;
 }
 
-/* Botão selecionado ou com estado ativo ganha preenchimento amarelo */
+/* Mantém o botão "Todos" ou filtros ativos com preenchimento amarelo */
 body.high-contrast button[aria-checked="true"],
-body.high-contrast button.bg-yellow-500 {
+body.high-contrast button[class*="bg-yellow-"] {
   background-color: #facc15 !important;
   color: #000000 !important;
 }
 
-/* 🔐 TELA DE LOGIN */
+/* 🔐 TELA DE LOGIN: Quadro centralizado escuro com borda amarela */
 body.high-contrast .max-w-md,
 body.high-contrast form {
   background-color: #121212 !important;
@@ -91,7 +99,7 @@ body.high-contrast button[type="submit"] {
 }
 
 
-/* ─── MODO INVERTIDO GLOBAL ─── */
+/* ─── 🔄 2️⃣ MODO INVERTIDO GLOBAL ─── */
 html.inverted,
 body.inverted {
   filter: invert(1) hue-rotate(180deg) !important;
@@ -105,8 +113,8 @@ body.inverted .emoji {
 }
 
 
-/* ─── MODO NORMAL ─── */
+/* ─── 💙 3️⃣ MODO NORMAL ─── */
 html.normal,
 body.normal {
-  /* Respeita as classes nativas do Tailwind */
+  /* Mantém as cores originais intactas */
 }
