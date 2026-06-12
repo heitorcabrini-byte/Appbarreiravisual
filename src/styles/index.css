@@ -1,122 +1,105 @@
 @import "tailwindcss";
 
 /* ==========================================================================
-   ♿ SISTEMA COMPLETO DE ACESSIBILIDADE VISUAL DO MURAL (WCAG AAA)
+   ♿ SISTEMA GLOBAL DE SOBREPOSIÇÃO PARA ACESSIBILIDADE VISUAL (WCAG AAA)
    ========================================================================== */
 
-/* ─── 1️⃣ MODO ALTO CONTRASTE (Baixa visão / Astigmatismo) ─── */
+/* ─── 1️⃣ MODO ALTO CONTRASTE ABSOLUTO (Letras Amarelas/Brancas em Fundo Preto) ─── */
+html.high-contrast,
 body.high-contrast,
-html.high-contrast {
+.high-contrast select,
+.high-contrast input {
   background-color: #000000 !important;
+  background: #000000 !important;
   color: #ffffff !important;
-
-  /* Força a barra de rolagem a obedecer o tema preto */
-  color-scheme: dark;
-
-  /* Aplica bordas e fundos pretos em TODOS os blocos, containers e elementos de layout */
-  & div, 
-  & main, 
-  & header, 
-  & nav, 
-  & select, 
-  & input {
-    background-color: #000000 !important;
-    background: #000000 !important;
-    color: #ffffff !important;
-    border-color: #ffffff !important;
-    box-shadow: none !important;
-  }
-
-  /* Input de busca ganha borda grossa branca e texto nítido */
-  & input[type="search"] {
-    border: 2px solid #ffffff !important;
-    color: #ffffff !important;
-  }
-  & input::placeholder {
-    color: #a1a1aa !important; /* Cinza claro de alto contraste */
-  }
-
-  /* Destaques principais, títulos e botões importantes ganham AMARELO PURO */
-  & h1, 
-  & h2, 
-  & .font-black, 
-  & .font-bold {
-    color: #ffff00 !important;
-  }
-
-  /* Botões de filtro em repouso recebem borda branca nítida */
-  & button {
-    background-color: #000000 !important;
-    color: #ffffff !important;
-    border: 2px solid #ffffff !important;
-    border-radius: 8px !important;
-  }
-
-  /* Botão de filtro ativo ou qualquer hover vira amarelo com letra preta (Inversão) */
-  & button[aria-checked="true"],
-  & button:hover {
-    background-color: #ffff00 !important;
-    color: #000000 !important;
-    border-color: #ffff00 !important;
-    
-    /* Garante que textos internos e spans dentro do botão ativo também fiquem pretos */
-    & span {
-      color: #000000 !important;
-    }
-  }
-
-  /* Badges de Categoria (Urgente, Importante, etc) e Tags internas */
-  & span.rounded-md,
-  & span.text-\[11px\] {
-    background-color: #000000 !important;
-    color: #ffffff !important;
-    border: 1px solid #ffffff !important;
-  }
-
-  /* Ícones e SVGs ganham cor branca pura forçada */
-  & svg {
-    stroke: #ffffff !important;
-    color: #ffffff !important;
-    fill: transparent !important;
-  }
-
-  /* Links e botões de ação do rodapé ("Ouvir", "Salvar", "Ver aviso") */
-  & button.text-blue-400,
-  & button.text-slate-400 {
-    color: #ffff00 !important;
-    text-decoration: underline !important;
-    border: none !important; /* Remove bordas dos botões internos text-only */
-    background: transparent !important;
-  }
-  
-  & button.text-green-400 {
-    color: #22c55e !important; /* Verde puro legível para o botão de áudio ativo */
-    font-weight: 900 !important;
-  }
-  
-  & button.text-yellow-400 {
-    color: #ffff00 !important; /* Amarelo puro fixo para os favoritos salvos */
-  }
+  color-scheme: dark !important;
 }
 
-/* ─── 2️⃣ MODO INVERTIDO (Fotofobia / Síndrome de Irlen) ─── */
-body.inverted,
-html.inverted {
+/* Força TODOS os textos comuns, parágrafos, inputs e metas a ficarem Branco Puro */
+body.high-contrast * {
+  background-color: #000000 !important;
+  background: #000000 !important;
+  color: #ffffff !important;
+  border-color: #ffffff !important;
+  box-shadow: none !important;
+  text-shadow: none !important;
+}
+
+/* Títulos principais, subtítulos, textos em negrito e destaques ganham AMARELO VIBRANTE */
+body.high-contrast h1,
+body.high-contrast h2,
+body.high-contrast h3,
+body.high-contrast strong,
+body.high-contrast .font-bold,
+body.high-contrast .font-black,
+body.high-contrast select {
+  color: #ffff00 !important;
+}
+
+/* Garante o contorno visível nítido em todos os botões e inputs */
+body.high-contrast button,
+body.high-contrast input,
+body.high-contrast select,
+body.high-contrast nav {
+  border: 2px solid #ffffff !important;
+}
+
+/* Botões do cabeçalho de ação rápida ou botões clicáveis de texto ganham Amarelo puro */
+body.high-contrast button.text-blue-400,
+body.high-contrast button.text-slate-400,
+body.high-contrast button:not([role="radio"]) {
+  color: #ffff00 !important;
+}
+
+/* Efeito de Inversão no Foco/Hover (Fundo acende Amarelo com Letra Preta para dar foco claro) */
+body.high-contrast button:hover,
+body.high-contrast button[aria-checked="true"],
+body.high-contrast input:focus,
+body.high-contrast select:focus {
+  background-color: #ffff00 !important;
+  background: #ffff00 !important;
+  color: #000000 !important;
+  border-color: #ffff00 !important;
+}
+
+/* Garante que sub-elementos (como o texto interno de botões ativos) também fiquem pretos */
+body.high-contrast button:hover *,
+body.high-contrast button[aria-checked="true"] * {
+  background-color: #ffff00 !important;
+  color: #000000 !important;
+}
+
+/* Força todos os ícones SVG a acenderem em branco com traço grosso */
+body.high-contrast svg {
+  stroke: #ffffff !important;
+  color: #ffffff !important;
+  stroke-width: 2.5px !important;
+}
+
+
+/* ─── 2️⃣ MODO INVERTIDO GLOBAL (Fotofobia e Proteção de Brilho) ─── */
+html.inverted,
+body.inverted {
   filter: invert(1) hue-rotate(180deg) !important;
   background-color: #ffffff !important;
-
-  /* Força elementos de mídia (como fotos, avatares ou emojis) a voltarem 
-     ao normal para não distorcer o rosto de pessoas ou ícones coloridos */
-  & img,
-  & [role="img"],
-  & span[aria-hidden="true"],
-  & .emoji {
-    filter: invert(1) hue-rotate(180deg) !important;
-  }
 }
 
+/* Aplica a inversão em todos os blocos internos para garantir consistência */
+body.inverted * {
+  background-color: transparent;
+}
+
+/* Evita que imagens, avatares ou os emojis das categorias fiquem com cores distorcidas */
+body.inverted img,
+body.inverted [role="img"],
+body.inverted span[aria-hidden="true"],
+body.inverted .emoji {
+  filter: invert(1) hue-rotate(180deg) !important;
+}
+
+
 /* ─── 3️⃣ MODO NORMAL ─── */
-body.normal,
-html.normal {
-  /* Mantém as cores nativas do painel escuro configuradas com as classes do Tailwind */
+html.normal,
+body.normal {
+  /* Respeita estritamente o layout estilizado no Figma */
 }
