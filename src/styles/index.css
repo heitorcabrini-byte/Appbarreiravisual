@@ -1,99 +1,100 @@
 @import "tailwindcss";
 
 /* ==========================================================================
-   ♿ SISTEMA GLOBAL DE SOBREPOSIÇÃO PARA ACESSIBILIDADE VISUAL (WCAG AAA)
+   ♿ SOBREPOSIÇÃO RADICAL DE ACESSIBILIDADE VISUAL (FORÇA BRUTA WCAG AAA)
    ========================================================================== */
 
-/* ─── 1️⃣ MODO ALTO CONTRASTE ABSOLUTO (Letras Amarelas/Brancas em Fundo Preto) ─── */
+/* ─── 1️⃣ MODO ALTO CONTRASTE ABSOLUTO (Fundo Preto / Letras e Bordas Amarelas ou Brancas) ─── */
 html.high-contrast,
-body.high-contrast,
-.high-contrast select,
-.high-contrast input {
+html.high-contrast body,
+body.high-contrast {
   background-color: #000000 !important;
   background: #000000 !important;
-  color: #ffffff !important;
+  color: #ffff00 !important;
   color-scheme: dark !important;
 }
 
-/* Força TODOS os textos comuns, parágrafos, inputs e metas a ficarem Branco Puro */
+/* ⚡ REGRA MESTRE: Altera absolutamente TODOS os elementos internos da página */
 body.high-contrast * {
+  /* Força todas as fontes para negrito pesado e aumenta o contraste da letra */
+  font-weight: 900 !important;
+  -webkit-text-stroke: 0.5px #000000;
+  
+  /* Transforma todas as cores de texto da página para Amarelo ou Branco Puro */
+  color: #ffff00 !important;
+  
+  /* Força todos os fundos de cards, cabeçalho e inputs a ficarem pretos */
   background-color: #000000 !important;
   background: #000000 !important;
-  color: #ffffff !important;
+  
+  /* Cria um contorno/borda visível e nítido em volta de absolutamente tudo */
   border-color: #ffffff !important;
+  
+  /* Remove sombras e efeitos que borram a visão de quem tem astigmatismo */
   box-shadow: none !important;
   text-shadow: none !important;
+  background-image: none !important;
 }
 
-/* Títulos principais, subtítulos, textos em negrito e destaques ganham AMARELO VIBRANTE */
-body.high-contrast h1,
-body.high-contrast h2,
-body.high-contrast h3,
-body.high-contrast strong,
-body.high-contrast .font-bold,
-body.high-contrast .font-black,
-body.high-contrast select {
-  color: #ffff00 !important;
+/* Textos secundários ou parágrafos de descrição longa ganham branco puro para não cansar as vistas */
+body.high-contrast p,
+body.high-contrast span,
+body.high-contrast time,
+body.high-contrast input::placeholder {
+  color: #ffffff !important;
 }
 
-/* Garante o contorno visível nítido em todos os botões e inputs */
-body.high-contrast button,
+/* Inputs, Selects e Botões ganham uma borda branca muito mais grossa e visível */
 body.high-contrast input,
 body.high-contrast select,
+body.high-contrast button,
 body.high-contrast nav {
-  border: 2px solid #ffffff !important;
+  border: 3px solid #ffffff !important;
+  outline: 2px solid #ffffff !important;
 }
 
-/* Botões do cabeçalho de ação rápida ou botões clicáveis de texto ganham Amarelo puro */
-body.high-contrast button.text-blue-400,
-body.high-contrast button.text-slate-400,
-body.high-contrast button:not([role="radio"]) {
-  color: #ffff00 !important;
-}
-
-/* Efeito de Inversão no Foco/Hover (Fundo acende Amarelo com Letra Preta para dar foco claro) */
+/* EFEITO DE INVERSÃO NO HOVER/FOCO: O botão apontado acende em Amarelo com Letras Pretas */
 body.high-contrast button:hover,
 body.high-contrast button[aria-checked="true"],
 body.high-contrast input:focus,
-body.high-contrast select:focus {
-  background-color: #ffff00 !important;
-  background: #ffff00 !important;
-  color: #000000 !important;
-  border-color: #ffff00 !important;
-}
-
-/* Garante que sub-elementos (como o texto interno de botões ativos) também fiquem pretos */
+body.high-contrast select:focus,
 body.high-contrast button:hover *,
 body.high-contrast button[aria-checked="true"] * {
   background-color: #ffff00 !important;
+  background: #ffff00 !important;
   color: #000000 !important;
+  border-color: #000000 !important;
 }
 
-/* Força todos os ícones SVG a acenderem em branco com traço grosso */
-body.high-contrast svg {
+/* Força todos os ícones e vetores SVG a ficarem brancos e espessos na tela */
+body.high-contrast svg,
+body.high-contrast svg * {
   stroke: #ffffff !important;
   color: #ffffff !important;
-  stroke-width: 2.5px !important;
+  stroke-width: 3px !important;
+  fill: transparent !important;
 }
 
 
-/* ─── 2️⃣ MODO INVERTIDO GLOBAL (Fotofobia e Proteção de Brilho) ─── */
+/* ─── 2️⃣ MODO INVERTIDO GLOBAL COMPLETO ─── */
 html.inverted,
+html.inverted body,
 body.inverted {
   filter: invert(1) hue-rotate(180deg) !important;
   background-color: #ffffff !important;
 }
 
-/* Aplica a inversão em todos os blocos internos para garantir consistência */
+/* Garante que tudo dentro do modo invertido mude de peso e ganhe letras legíveis */
 body.inverted * {
-  background-color: transparent;
+  font-weight: 800 !important;
 }
 
-/* Evita que imagens, avatares ou os emojis das categorias fiquem com cores distorcidas */
+/* Reinverte as mídias e emojis para que não fiquem assustadores ou com cores erradas */
 body.inverted img,
 body.inverted [role="img"],
 body.inverted span[aria-hidden="true"],
-body.inverted .emoji {
+body.inverted .emoji,
+body.inverted svg {
   filter: invert(1) hue-rotate(180deg) !important;
 }
 
@@ -101,5 +102,5 @@ body.inverted .emoji {
 /* ─── 3️⃣ MODO NORMAL ─── */
 html.normal,
 body.normal {
-  /* Respeita estritamente o layout estilizado no Figma */
+  /* Respeita perfeitamente o seu layout padrão */
 }
