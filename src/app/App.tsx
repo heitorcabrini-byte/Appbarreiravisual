@@ -19,6 +19,9 @@ export default function App() {
   const [search, setSearch] = useState('');
   const [sort, setSort] = useState<string>('recente');
 
+  // 📁 Estado Global de Favoritos: Guarda um array com os IDs favoritados
+  const [favoritedIds, setFavoritedIds] = useState<string[]>([]);
+
   const minFont = 12;
   const maxFont = 24;
 
@@ -46,14 +49,13 @@ export default function App() {
     return () => window.removeEventListener('keydown', handleGlobalKeyDown);
   }, [contrastMode]);
 
-  // ⚡ Sincronização e Injeção de Classes visuais no HTML Nativo
+  // ⚡ Sincronização do modo de acessibilidade visual
   useEffect(() => {
     const root = document.documentElement;
     const body = document.body;
-    
     root.style.fontSize = `${fontSize}px`;
     
-    root.classList.remove('high-contrast', 'inverted', 'inverted-contrast', 'normal');
+    root.classList.remove('high-contrast', 'inverted', 'normal');
     body.classList.remove('high-contrast', 'inverted', 'normal');
     
     if (contrastMode === 'high-contrast') {
@@ -79,29 +81,41 @@ export default function App() {
     });
   };
 
-  // Filtragem e busca
+  // ⭐️ Função para Adicionar ou Remover dos favoritos globais
+  const toggleFavoriteGlobal = (id: string) => {
+    setFavoritedIds(prev => 
+      prev.includes(id) ? prev.filter(favId => favId !== id) : [...prev, id]
+    );
+  };
+
+  // 🔍 Lógica de Filtragem (Categoria + Busca + Regra de Favoritos)
   const filteredAnnouncements = ANNOUNCEMENTS_DATA.filter(item => {
     const categoryStr = item?.category || 'Geral';
     const titleStr = item?.title || '';
     const contentStr = item?.content || '';
 
+    // Se a pessoa escolheu "Meus favoritos" no seletor, filtra por ID salvo
+    if (sort === 'favoritos' && !favoritedIds.includes(item.id)) {
+      return false;
+    }
+
     const matchesFilter = filter === 'todos' || categoryStr.toLowerCase() === filter.toLowerCase();
     const matchesSearch = 
       titleStr.toLowerCase().includes(search.toLowerCase()) ||
-      contentStr.toLowerCase().includes(search.toLowerCase()) ||
-      categoryStr.toLowerCase().includes(search.toLowerCase());
+      contentStr.toLowerCase().includes(search.toLowerCase());
+      
     return matchesFilter && matchesSearch;
   });
 
-  // 🔄 Ordenação Numérica Consertada (Evita bugs com IDs como "10")
+  // 🔄 Ordenação Numérica Cronológica
   const sortedAnnouncements = [...filteredAnnouncements].sort((a, b) => {
     const idA = parseInt(a.id, 10);
     const idB = parseInt(b.id, 10);
     
     if (sort === 'antigo') {
-      return idA - idB; // Menor ID primeiro (Mais antigo)
+      return idA - idB; // Mais antigo primeiro
     }
-    return idB - idA; // Maior ID primeiro (Mais recente)
+    return idB - idA; // Mais recente primeiro
   });
 
   return (
@@ -141,7 +155,7 @@ export default function App() {
                 Mural de Avisos
               </h1>
               <p className="text-sm text-slate-400 mt-2">
-                Acompanhe comunicados, events e informações importantes da escola.
+                Acompanhe comunicados, eventos e informações importantes da escola.
               </p>
             </div>
 
@@ -165,13 +179,19 @@ export default function App() {
 
             {sortedAnnouncements.length === 0 ? (
               <div className="text-center py-16 text-slate-500 text-sm border border-dashed border-slate-800 rounded-2xl mt-8">
-                Nenhum aviso encontrado para os filtros selecionados.
+                {sort === 'favoritos' 
+                  ? "Você ainda não favoritou nenhum aviso." 
+                  : "Nenhum aviso encontrado para os filtros selecionados."}
               </div>
             ) : (
-              /* ⚡ O items-start impede que os cards estiquem de forma desalinhada ao expandir */
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 items-start">
                 {sortedAnnouncements.map((announcement) => (
-                  <AnnouncementCard key={announcement.id} announcement={announcement} />
+                  <AnnouncementCard 
+                    key={announcement.id} 
+                    announcement={announcement} 
+                    isFavorited={favoritedIds.includes(announcement.id)}
+                    onToggleFavorite={() => toggleFavoriteGlobal(announcement.id)}
+                  />
                 ))}
               </div>
             )}
