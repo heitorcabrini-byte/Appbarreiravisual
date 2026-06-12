@@ -1,173 +1,118 @@
 @import "tailwindcss";
 
 /* ==========================================================================
-   ♿ REESTRUTURAÇÃO ULTRA-ESTRITA ALTO CONTRASTE (DIRETO DO FIGMA)
+   ♿ ALTO CONTRASTE SUAVE E FLUIDO (ESTILO FIGMA REFINADO)
    ========================================================================== */
 
 html.high-contrast {
   background-color: #000000 !important;
 }
 
-/* 🖤 FUNDO PRETO ABSOLUTO GLOBAL */
+/* 🖤 FUNDO PRETO ABSOLUTO COM TRANSIÇÃO SUAVE */
 html.high-contrast body,
 html.high-contrast #root,
 html.high-contrast .app-container,
 html.high-contrast main,
-html.high-contrast div:not(.custom-alert-strip) {
+html.high-contrast div:not(.custom-alert-strip):not(.profile-avatar) {
   background-color: #000000 !important;
   background: #000000 !important;
+  transition: background-color 0.3s ease, border-color 0.3s ease;
 }
 
-/* 👑 CABEÇALHO SUPERIOR (HEADER): Fundo Amarelo Ouro e Componentes Internos Pretos */
+/* 👑 CABEÇALHO SUPERIOR (HEADER): Amarelo com cantos originais preservados */
 html.high-contrast header,
-html.high-contrast header *,
-html.high-contrast nav,
-html.high-contrast nav * {
+html.high-contrast header nav,
+html.high-contrast [role="banner"] {
   background-color: #facc15 !important;
   background: #facc15 !important;
-  color: #000000 !important;
-  border-color: #000000 !important;
+  border-bottom: 1px solid #d6a100 !important;
 }
 
-/* Ícones do Header pretos */
+/* Textos dentro do cabeçalho em preto suave (não puro) para não agredir os olhos */
+html.high-contrast header *,
+html.high-contrast header button,
+html.high-contrast header span,
+html.high-contrast header h2 {
+  color: #111111 !important;
+}
+
 html.high-contrast header svg,
-html.high-contrast header svg *,
-html.high-contrast nav svg,
-html.high-contrast nav svg * {
-  stroke: #000000 !important;
-  color: #000000 !important;
+html.high-contrast header svg * {
+  stroke: #111111 !important;
   fill: transparent !important;
 }
 
-/* 🟨 BARRA DE ALERTA DE ALTO CONTRASTE DEBAIXO DO TOP */
+/* 🟨 BARRA DE ALERTA DE ACESSIBILIDADE */
 html.high-contrast .custom-alert-strip {
-  background-color: #1a1500 !important;
+  background-color: #171401 !important;
   color: #facc15 !important;
-  border-bottom: 2px solid #facc15 !important;
+  border-bottom: 1px solid #2e2502 !important;
+  font-size: 0.8rem !important;
+  letter-spacing: 0.025em;
 }
 
-/* 👤 LINHA DO PERFIL DO USUÁRIO LOGADO */
-html.high-contrast .user-profile-strip {
-  background-color: #000000 !important;
-  border-bottom: 1px solid #222222 !important;
-}
-html.high-contrast .user-profile-strip .user-name {
-  color: #ffffff !important;
-}
-html.high-contrast .user-profile-strip .user-email {
-  color: #aaaaaa !important;
-}
-html.high-contrast .user-profile-strip .profile-avatar {
-  background-color: #222222 !important;
-  color: #ffffff !important;
-  border-color: #444444 !important;
-}
-html.high-contrast .user-profile-strip .logout-btn {
-  background-color: #111111 !important;
-  color: #ffffff !important;
-  border: 1px solid #444444 !important;
-}
-
-/* 📝 TEXTOS DO CORPO PRINCIPAL E INTRODUÇÃO */
-html.high-contrast .school-tag {
-  color: #aaaaaa !important;
-}
-html.high-contrast .main-title {
-  color: #ffffff !important;
-  font-weight: 900 !important;
-}
-html.high-contrast .main-subtitle {
-  color: #cccccc !important;
-}
-
-/* 📋 CARDS DE AVISO (MURAL): Fundo marrom/avermelhado ultra escuro e contornos definidos */
+/* 📋 CARDS DE AVISO (MURAL): Bordas arredondadas e design elegante do Figma */
 html.high-contrast .announcements-grid > div,
-html.high-contrast main article,
-html.high-contrast main div[class*="bg-slate-"],
-html.high-contrast main div[class*="bg-gray-"] {
-  background-color: #170b04 !important; /* Cor do Figma */
-  border: 2px solid #3a1d0a !important;   /* Contorno marrom do Figma */
-  border-radius: 1rem !important;
-  box-shadow: none !important;
+html.high-contrast main article {
+  background-color: #140a04 !important; /* Tom marrom escuro suave */
+  border: 1.5px solid #4a270f !important; /* Borda mais fina e menos agressiva */
+  border-radius: 1rem !important; /* Devolve o arredondamento leve */
+  padding: 1.5rem !important;
 }
 
-/* Elementos e Textos de dentro dos Cards */
+/* Textos internos dos cards */
 html.high-contrast .announcements-grid > div *,
 html.high-contrast main article * {
   background-color: transparent !important;
-  color: #ffffff !important;
 }
 
-/* Badges de Categoria dentro do card (ex: URGENTE, INFORMATIVO) */
+html.high-contrast .announcements-grid h2,
+html.high-contrast .announcements-grid h3 {
+  color: #ffffff !important;
+  font-weight: 800 !important;
+}
+
+html.high-contrast .announcements-grid p {
+  color: #e2e8f0 !important; /* Branco levemente acinzentado para leitura confortável */
+}
+
+/* Badges (Tags) internas dos cards */
 html.high-contrast main article span[class*="bg-"],
 html.high-contrast .announcements-grid span[class*="bg-"] {
-  background-color: #2c1408 !important;
+  background-color: #2a1204 !important;
   border: 1px solid #facc15 !important;
   color: #facc15 !important;
+  border-radius: 0.5rem !important;
+  padding: 0.25rem 0.5rem !important;
 }
 
-/* Links e Botões de Ação do card (Ouvir, Salvar, Ver Aviso) */
-html.high-contrast main article button,
-html.high-contrast main article a,
+/* Botões internos de ação (Ouvir, Salvar) */
 html.high-contrast .announcements-grid button,
 html.high-contrast .announcements-grid a {
-  border: 1px solid #3a1d0a !important;
-  background-color: #110602 !important;
+  border: 1px solid #4a270f !important;
+  background-color: #1c0f06 !important;
   color: #ffffff !important;
+  border-radius: 0.5rem !important;
+  transition: all 0.2s ease;
 }
 
-/* 🔍 CONTROLES DE BUSCA, BOTÕES DE FILTRO DO MURAL */
+html.high-contrast .announcements-grid button:hover {
+  background-color: #2d190b !important;
+  border-color: #facc15 !important;
+}
+
+/* 🔍 BARRA DE BUSCA E FILTROS MAIS LEVES */
 html.high-contrast input,
 html.high-contrast input[type="search"],
 html.high-contrast select {
-  background-color: #111111 !important;
+  background-color: #0f0f10 !important;
   color: #ffffff !important;
-  border: 2px solid #444444 !important;
+  border: 1.5px solid #3f3f46 !important;
+  border-radius: 0.75rem !important;
 }
 
-/* Botões de Filtro de Categoria Desativados */
-html.high-contrast main button:not([aria-checked="true"]) {
-  background-color: #111111 !important;
-  color: #ffffff !important;
-  border: 1px solid #333333 !important;
-}
-
-/* Botão Ativo (Ex: Filtro "Todos" em Amarelo com Letras Pretas) */
-html.high-contrast button[aria-checked="true"],
-html.high-contrast button[class*="bg-yellow-500"],
-html.high-contrast .bg-yellow-500 {
-  background-color: #facc15 !important;
-  background: #facc15 !important;
-  color: #000000 !important;
-}
-
-/* 🔐 TELA DE LOGIN: Quadro centralizado escuro com borda amarela */
-html.high-contrast .max-w-md,
-html.high-contrast form {
-  background-color: #121212 !important;
-  border: 3px solid #facc15 !important;
-}
-
-html.high-contrast button[type="submit"] {
-  background-color: #facc15 !important;
-  color: #000000 !important;
-  font-weight: 900 !important;
-}
-
-/* ─── 🔄 2️⃣ MODO INVERTIDO GLOBAL ─── */
-html.inverted,
-html.inverted body {
-  filter: invert(1) hue-rotate(180deg) !important;
-  background-color: #ffffff !important;
-}
-
-html.inverted img, 
-html.inverted svg {
-  filter: invert(1) hue-rotate(180deg) !important;
-}
-
-/* ─── 💙 3️⃣ MODO NORMAL ─── */
-html.normal,
-html.normal body {
-  /* Mantém as cores padrões do Tailwind v4 */
-}
+/* Botões de Filtro Desativados */
+html.high-contrast main button:not([aria-checked="true"]):not(.logout-btn) {
+  background-color: #0f0f10 !important;
+  color: #a1a1aa !important;
+  border: 1
