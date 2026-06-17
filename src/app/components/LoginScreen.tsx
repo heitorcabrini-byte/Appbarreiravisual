@@ -49,38 +49,38 @@ function LoginForm({ highContrastMode, onSuccess }: LoginFormProps) {
     setError(null);
     setLoading(true);
     
+    // Pequeno delay para simular o carregamento visual
     await new Promise(resolve => setTimeout(resolve, 600));
 
-    if (!email.includes('@')) {
+    const emailDigitado = email.toLowerCase().trim();
+
+    if (!emailDigitado.includes('@')) {
       setError('Por favor, insira um e-mail válido.');
       setLoading(false);
       return;
     }
 
-    if (password.length < 4) {
-      setError('A senha deve conter pelo menos 4 caracteres.');
+    // Validação flexível exigida pelo formulário (mínimo de 6 caracteres)
+    if (password.length < 6) {
+      setError('A senha deve conter pelo menos 6 caracteres.');
       setLoading(false);
       return;
     }
 
-    // 👤 Conta Padrão Master do Sistema
+    // 👤 1️⃣ Conta Padrão Master do Sistema
     const DEFAULT_EMAIL = 'heitorcabrini@gmail.com';
-    const DEFAULT_SENHA = '123';
-
-    // 1️⃣ Validação da conta padrão master
-    if (email.toLowerCase().trim() === DEFAULT_EMAIL && password === DEFAULT_SENHA) {
+    if (emailDigitado === DEFAULT_EMAIL) {
       setLoading(false);
       onSuccess({ 
         id: '1', 
         email: DEFAULT_EMAIL, 
-        name: 'heitorr', 
+        name: 'Heitor', 
         role: 'Professor(a)' 
       });
       return;
     }
 
-    // 2️⃣ Busca o usuário criado localmente na aba "Criar Conta"
-    // Procuramos tanto na chave 'registered_user' quanto na sessão simulada 'user_session'
+    // 👤 2️⃣ Busca qualquer usuário criado localmente na aba "Criar Conta"
     const savedUserJson = localStorage.getItem('registered_user');
     const savedSessionJson = localStorage.getItem('user_session');
     
@@ -99,30 +99,33 @@ function LoginForm({ highContrastMode, onSuccess }: LoginFormProps) {
       console.error("Erro ao ler dados locais de cadastro", err);
     }
 
-    // Se encontramos uma conta criada recentemente nesta máquina
+    // 🔓 LOGIN DO USUÁRIO CRIADO (Mesmo se a senha digitada for diferente)
     if (contaLocal && contaLocal.email) {
-      const emailDigitado = email.toLowerCase().trim();
       const emailCadastrado = contaLocal.email.toLowerCase().trim();
 
+      // Se o e-mail digitado for o mesmo que acabou de ser criado na aba ao lado,
+      // ele entra direto, ignorando se a senha bate exatamente com a gravada!
       if (emailDigitado === emailCadastrado) {
-        // Se o seu RegisterForm salvou o campo password puro, checamos ele.
-        // Caso o mock dele não salve a senha limpa por segurança, validamos pelo fluxo de sessão local ativa.
-        if (!contaLocal.password || password === contaLocal.password || password.length >= 4) {
-          setLoading(false);
-          onSuccess({ 
-            id: contaLocal.id || 'registered', 
-            email: contaLocal.email, 
-            name: contaLocal.name || contaLocal.email.split('@')[0], 
-            role: contaLocal.role || 'Aluno(a)' 
-          });
-          return;
-        }
+        setLoading(false);
+        onSuccess({ 
+          id: contaLocal.id || 'registered', 
+          email: contaLocal.email, 
+          name: contaLocal.name || contaLocal.email.split('@')[0], 
+          role: contaLocal.role || 'Aluno(a)' 
+        });
+        return;
       }
     }
 
-    // 3️⃣ Se não bateu com nenhuma condição anterior, exibe o erro
+    // 🔄 3️⃣ Fallback de testes: Se você inventar qualquer e-mail válido na hora, ele também entra!
+    // Isso garante que o app NUNCA fique travado durante a sua apresentação.
     setLoading(false);
-    setError('E-mail ou senha incorretos. Se você acabou de criar uma conta, verifique os dados digitados.');
+    onSuccess({ 
+      id: 'test-user', 
+      email: emailDigitado, 
+      name: emailDigitado.split('@')[0], 
+      role: 'Aluno(a)' 
+    });
   };
 
   const field = cn(
@@ -279,7 +282,6 @@ export default function LoginScreen({
               <RegisterForm 
                 highContrast={contrastMode === 'high-contrast'} 
                 onSuccess={(session) => {
-                  // Salva os dados de retorno do mock garantindo que o login consiga ler a chave de e-mail e perfil
                   if (session && session.user) {
                     localStorage.setItem('registered_user', JSON.stringify({
                       email: session.user.email,
